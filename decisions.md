@@ -64,3 +64,22 @@ Review approval of this document does not amend the governing architecture.
 | D-02d | Identity groups/memberships and Authorisation decisions cannot be derived as effective rights from reporting relationships | Verified governing invariant | Preserve in archetype acceptance criteria |
 
 These entries record design proposals for review. They do not amend accepted ADRs, issue implementation instructions or make the proposed resolver an existing public API.
+
+## Consolidated personal, membership, legal-governance and publishing direction (13 November 2026)
+
+The synthesis and proposed acceptance cases are in [`proposals/membership-governance-publication.md`](proposals/membership-governance-publication.md). These are **review-agreed design directions**, not yet accepted normative requirements or verified implementation contracts.
+
+| ID | Direction | Status / qualification |
+|---|---|---|
+| G-01 | Personal groups remain private; explicit resource-level sharing never adds other members to the person's system-managed group | Review agreed; preserves existing Identity invariant |
+| G-02 | Membership is the Identity-owned person/group relationship; other owners may use its identifier as context, not duplicate it | Review agreed; preferences by membership require a Profile contract extension |
+| G-03 | Business records created on behalf of a group ordinarily remain under that group's designated business control after departure | Proposed default, subject to domain rules, contracts, intellectual-property and applicable law |
+| G-04 | Organisation-supplied legal/policy documents and agreements can be recorded with versions, sources, evidence, jurisdiction/activity context and withdrawal | Review agreed direction; validity/applicability cannot be asserted automatically |
+| G-05 | Privacy and legal obligations can depend on a membership but also apply independently to customers/visitors and cross-border activities | Review agreed boundary; Privacy/Legal Compliance public contracts not verified |
+| G-06 | Optional application-wide community group for eligible registered users; public audiences are separate: application public and world public | Review agreed; anonymous world audience is not an Identity group |
+| G-07 | Visibility, licence, editorial authority, group/resource ownership and creator attribution are separate | Review agreed; publishing does not itself transfer ownership |
+| G-08 | Reusable publication supports authorisation, reviewed contributions, immutable revisions, pinned reuse, withdrawal and lawful attribution/deletion | Proposed capability integration; Publisher contract review required |
+| G-09 | Group-context preference order includes member override then organisational default then general Profile fallback, with locked/mandatory policies evaluated separately | Proposed; supersedes simpler Profile-first proposal in group context |
+| G-10 | Do not create new community/public ownership layers, membership databases or automatic legal-rule engines without proven independent authority | Review agreed constraint |
+
+**Outstanding before ADR adoption:** decide member preference persistence and lifecycle, the legal-context representation, Publisher's actual public interfaces, licensing/rights enforcement, publication dependency handling, and cross-jurisdiction legal policy provenance.
