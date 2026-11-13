@@ -50,3 +50,17 @@ Review approval does not authorise changing implementations, accepted ADRs, stan
 | D-01c | Resolve Configuration/Identity/Authorisation ADR-0012 composition gaps as targeted integration work, not broad rewrites | Finding | Separate design and measured acceptance review; no implementation now |
 
 Review approval of this document does not amend the governing architecture.
+
+## Task 3 — Requested architectural direction (13 November 2026)
+
+| ID | Proposed decision | Status | Condition / outstanding point |
+|---|---|---|---|
+| D-01d | Profile remains canonical for a person's `locale`/`zoneinfo`; Configuration provides organisational display defaults and Clock validates/formats | Proposed, grounded in existing contracts | No duplicate authoritative account values |
+| D-01e | Effective *ordinary, non-locked* display preference: authorised Profile value if present, otherwise Configuration group/ancestor/tenant/platform/deployment/default hierarchy | Proposed | Define absence versus provider failure; preserve authorised group/tenant context |
+| D-01f | Resolve once in request-scoped server context where practical; hydrate with the same values and clear on viewer/group/preference changes | Proposed; aligns with performance review | No public cache or exposure of other viewers' preferences |
+| D-01g | Interaction between locked deployment settings and personal Profile preferences | **Open** | Specify policy before committing to a universal precedence rule |
+| D-01h | Public resolver location and interface | **Open** | Prefer existing application/IAM composition ports; require contract reconciliation before choosing |
+| D-02c | Defer a standalone `organisation-model` capability unless independent state, governance and lifecycle are demonstrated | Proposed | Test archetypes and typed reporting against company, club and retailer cases; no new repository authorised |
+| D-02d | Identity groups/memberships and Authorisation decisions cannot be derived as effective rights from reporting relationships | Verified governing invariant | Preserve in archetype acceptance criteria |
+
+These entries record design proposals for review. They do not amend accepted ADRs, issue implementation instructions or make the proposed resolver an existing public API.
