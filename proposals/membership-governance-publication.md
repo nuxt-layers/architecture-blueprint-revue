@@ -1,7 +1,7 @@
 # Proposal — Personal, Membership and Organisational Governance
 
 **Status:** Consolidated blueprint proposal; not normative and not an accepted ADR.
-**Evidence baseline:** `nuxt-layers/architecture-rules` `master` at `94210cb938f7e3945d933b903cc7a9d71e3a18e7`; governing `docs/identity.md`, `docs/privacy.md`, `docs/catalogue.md`, ADR-0002, ADR-0009, ADR-0012, ADR-0016. Reviewed published `CONTRACT.md` for Identity, Configuration, Profile, Authorisation and IAM Integration. Root `CONTRACT.md` was not retrievable for Privacy or Legal Compliance; Publisher and Theme Manager contracts have **not yet been reviewed** for this proposal.
+**Evidence baseline:** `nuxt-layers/architecture-rules` `master` at `94210cb938f7e3945d933b903cc7a9d71e3a18e7`; governing `docs/identity.md`, `docs/privacy.md`, `docs/catalogue.md`, ADR-0002, ADR-0009, ADR-0012, ADR-0016. Reviewed published `CONTRACT.md` for Identity, Configuration, Profile, Authorisation and IAM Integration. Root `CONTRACT.md` was not retrievable for Privacy or Legal Compliance. Publisher's root `CONTRACT.md` has now been inspected; Theme Manager and the other resource owners' publishing contracts have **not yet been reviewed** for this proposal.
 
 ## 1. Intent
 
@@ -66,7 +66,13 @@ An individual's personal group remains private and independently controlled; an 
 - Withdrawal and deletion require checking lawful obligations, published licences, external copies and dependencies. **Public does not mean permanently undeletable.** Public URLs can return an appropriate removal status/tombstone where lawful, without leaking restricted details.
 - On contributor departure, retain appropriate revision history and content; handle visible attribution and identifying audit data independently under relevant policy.
 
-## 7. Suggested end-to-end acceptance scenarios
+## 7. Publisher contract evidence and limits
+
+Publisher's current published `CONTRACT.md` already describes host-registered document types, drafts and publication transitions, optional approvals, scheduled publication, immutable document versions/history, backlink checks, published feeds/sitemap entries, server-side Authorisation decisions, Profile-based author-name lookups and person-data export/erasure functions. It is fully headless and makes presentation the host's responsibility.
+
+This demonstrates **existing reusable mechanics**; it does **not** establish that Publisher already handles arbitrary cross-capability themes/templates, all four proposed audience classes, membership-scoped publication, community editing, licensing, public ownership transfer or cross-group pinned external reuse. Those require separate owner-contract review and explicit decisions. Avoid duplicating working Publisher functions or reowning Theme Manager and other resource records.
+
+## 8. Suggested end-to-end acceptance scenarios
 
 1. **Private theme:** creator stores a theme in their personal group, grants one colleague review access, then publishes a selected revision to application public without losing ownership.
 2. **Community template:** an eligible registered user contributes a template, reviewers approve it, another group pins version 2, later updates or withdrawal do not silently overwrite that dependency.
@@ -75,15 +81,15 @@ An individual's personal group remains private and independently controlled; an 
 5. **Multi-region worker:** one person has two active memberships in different regions; different organisational display defaults and lawful local policies may apply. An opt-out is recorded with consent/evidence/effective dates, not automatically deemed legally valid.
 6. **Rights request:** one person's erasure/withdrawal request affects private, group and public records; responsible owners evaluate applicable exceptions, third-party rights, published licences and audit retention; do not guarantee deletion from external copies.
 
-## 8. Open design questions and decision gates
+## 9. Open design questions and decision gates
 
 1. **Membership scoped personal preferences:** Profile public extension, applicability to ended/suspended memberships and lawful retention.
 2. **Organisation legal context:** legal entities/controller identities, region/activity applicability and verification of asserted exceptions, including opt-outs.
-3. **Publication core:** whether Publisher's public contract supplies suitable versioning, status transitions, moderation hooks, audience and reuse controls; verify its root contract before ownership decisions.
+3. **Publication core:** Publisher confirms versioning and transitions; assess audience, moderation, licence and cross-capability reuse gaps against its published boundaries before any ownership extension.
 4. **Cross-capability publication:** how Theme Manager, UI templates and other domain records expose safe published snapshots or revision references without duplicated authority.
 5. **Ownership transfer and licensing:** evidence, acceptance, revocation, derived works and irrevocable rights; avoid treating visibility as a licence.
 6. **Departure and deletion:** consistent effects, privacy/audit/legal-hold precedence, deletion/withdrawal notices and external reuse.
 7. **Application community provisioning:** eligibility, automatic enrolment, termination and moderation; no mandatory community for private applications.
 8. **Operational performance:** public SSR/indexability, fast feeds and caching without exposing membership-restricted material.
 
-**Next step:** obtain only the available root `CONTRACT.md` for Publisher and relevant resource owners, then review discoverability and publishing integration against the Capability Standard. Prepare governing ADR revisions only after explicit decisions; no implementation or normative changes are authorised by this review.
+**Next step:** review the other relevant resource owners' root `CONTRACT.md` where required, then review discoverability and publishing integration against the Capability Standard. Prepare governing ADR revisions only after explicit decisions; no implementation or normative changes are authorised by this review.
