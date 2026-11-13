@@ -36,3 +36,39 @@
 Treat the IAM contract's staleness as a **targeted public-contract reconciliation gap**, not justification for refactoring working IAM implementation. Do not introduce a new preference service or modify capability repositories during the blueprint review.
 
 **Next review step:** agree the effective-preference ownership and resolution contract, then assess whether a separate `organisation-model` state/lifecycle remains justified. Submit any implementation or governing changes for separate approval.
+
+## Task 3 — Proposed effective-preference resolution rule
+
+**Status:** Proposed composition contract for review, not existing behaviour. Evidence: `configuration/CONTRACT.md`, `profile/CONTRACT.md`, `clock/CONTRACT.md`, `iam-integration/CONTRACT.md` and governing `docs/identity.md`, checked on 13 November 2026.
+
+### Ownership and precedence
+
+The composition root, or a formally approved IAM integration adapter, MAY present one effective viewer-specific display-settings object without creating a second authoritative store:
+
+| Field | Authoritative personal source | Fallback source | Interpretation |
+|---|---|---|---|
+| `locale` | Profile `locale` | Current authorised group's Configuration value → permitted ancestor values → tenant → platform → deployment → declared default | Presentation/i18n layer |
+| `timeZone` | Profile `zoneinfo` | Same Configuration hierarchy for the relevant Clock display setting | Clock |
+| `hourCycle`, date/time display patterns | No alternative person-level source is approved here | Host-declared Configuration defaults, subject to the owning presentation/Clock contract | Clock; validate semantics before use |
+
+Profile preference absence, rather than any failure, allows a documented fallback. A failed or denied lookup MUST NOT silently reveal another viewer's data or broaden the caller's rights. The host MUST obtain verified subject, tenant and group context, decide whether this viewer may access each source, and distinguish group and account reads. `getConfiguration({accountId})` is privileged and does not supply group lineage or enforce account ownership. Do not combine those reads by pretending they are one Configuration scope.
+
+The governing Configuration contract already resolves group → ancestor → tenant → platform → deployment → default; a **locked deployment value** is authoritative for a setting it actually governs. A proposed preference resolver must honour any declared locked configuration, and should not declare personal `locale` or `zoneinfo` as competing account-scoped Configuration settings. Whether a locked organisational display constraint may override a person's Profile preference is **not yet decided**; reject conflicting policy designs until it is explicitly specified. This proposal assumes ordinary non-locked organisational display defaults.
+
+Personal display preferences MUST NOT govern legal deadlines, security expiries, contractual time rules or canonical persistence. The domain identifies the applicable jurisdiction/time-zone policy independently.
+
+### Serving and invalidating
+
+- Resolve in trusted server request context for the current viewer, tenant and selected group; return only permitted primitive display settings with provenance that does not disclose protected information.
+- Reuse the effective values in the same request's SSR and initial hydration payload; avoid duplicate network lookups and unnecessary full-page reloads. Minimise payload and avoid global mutable state.
+- On sign-out, account change, active-group change, revocation or authoritative preference update, clear viewer-scoped state and re-resolve. Do not put personalised results in shared caches or public runtime configuration.
+- Treat missing values differently from lookup failures; failures follow the relevant public contract and fail closed where security is affected. A public anonymous page may use properly selected non-personal defaults.
+- Prefer integration through existing public ports and an application/suite composition adapter; no new preference service or repository without contract evidence.
+
+### Acceptance cases to specify before implementation
+
+Own profile locale and zone; group and tenant fallback; conflict with locked policy; unauthorised group; account switch; group switch; privacy isolation; server/client hydration equivalence; changed preference invalidation; DST and legal-deadline separation; failed Profile or Configuration provider; measured SSR request count and latency.
+
+### Decision requested
+
+Approve the **ownership and intended fallback behaviour as a design direction** while retaining the locked-policy conflict, resolver location and exact public signature as open questions. Do not assert a shipped resolver or modify IAM implementations.
