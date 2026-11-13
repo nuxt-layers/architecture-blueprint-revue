@@ -61,3 +61,25 @@ A catalogue entry defines an established architectural responsibility or a provi
 ## Next evidence required
 
 Review the contracts relevant to unresolved boundaries, particularly `profile`, `scheduler`, `message-queue`, `workflow`, `publisher`, `ui`, `temporal-gateway`, and `integrations` if published. Do not inspect other files outside `architecture-rules` without approval.
+
+## Task 2 — Declarative configuration and organisational ownership (13 November 2026)
+
+**Evidence:** `architecture-rules/docs/identity.md` at governing SHA `94210cb938f7e3945d933b903cc7a9d71e3a18e7`; published `CONTRACT.md` on `master` for Configuration, Identity, Authorisation, Profile and Clock. This review does not verify implementation beyond contract claims.
+
+| Owner | Verified boundary | Implication |
+|---|---|---|
+| Configuration | Declared setting schemas, scope and precedence, effective values with provenance, and governed change requests | Reuse the existing management mechanisms; do not assume ownership of domain policy meaning |
+| Identity | Opaque identities, tenants, single-parent group hierarchy and membership lifecycle | Organisational archetypes must not reown groups, hierarchy or membership |
+| Authorisation | Roles, permissions, grants and resource-aware server decisions | Archetypes may request role profiles but cannot grant access themselves |
+| Profile | Canonical personal attributes, preferences including `locale` and `zoneinfo`, and disclosure controls | Configuration account scope must not create a second authoritative personal-preference store |
+| Clock | Time representation, parsing, formatting and time-zone rules | Owner of time semantics, not preference persistence or business scheduling |
+
+**Proposed reusable pattern (not an implemented contract):** the domain owner publishes a validated schema and controls its business meaning; a suitable management mechanism handles scoped values, revisions, provenance and approvals; the domain owner validates and enforces effective rules. Whether Configuration can provide all these management functions for complex structured definitions remains to be demonstrated.
+
+**Organisation Model:** the governing Identity and Access document distinguishes Identity groups from the domain entities they represent. Organisational archetypes may describe positions, reporting relationships, organisation types and requested role profiles. A separate owning capability requires evidence of an independent lifecycle; otherwise prefer declarative specialisation under ADR-0016. Reporting relationships must not imply access inheritance.
+
+**Contract and integration constraints:** Configuration's published contract acknowledges incomplete ADR-0012 single-call composition. Identity's shared caller/access migration remains unfinished, and Authorisation has explicit provider wiring; no broad rewrite or compliance claim is warranted. Preserve authentication recency, assurance, tenant boundaries, approvals and fail-closed behaviour when composition is eventually reconciled.
+
+**Open questions:** how domain schemas are registered and versioned; whether complex configuration should be stored with its domain or in Configuration; migration/rollback of definitions; precedence between organisational defaults and personal preferences; runtime activation and audit; how the organisation archetype is tied to Identity's authoritative group identifiers; whether a dedicated Organisation Model lifecycle can be justified.
+
+**Recommended next evidence:** inspect `iam-integration/CONTRACT.md` for existing cross-capability preference resolution before proposing a new mechanism; then prepare a small ownership and definition-lifecycle decision for explicit approval. No architecture-rule or implementation change is authorised.

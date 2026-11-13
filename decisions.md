@@ -38,3 +38,15 @@
 ## Change control
 
 Review approval does not authorise changing implementations, accepted ADRs, standards or capability contracts. Record formally adopted changes here only after their governing PRs are accepted. No new connector, capability or infrastructure implementation is authorised by this register.
+
+## Task 2 — Review findings awaiting architectural decisions (13 November 2026)
+
+| ID | Recommendation or question | Status | Required next action |
+|---|---|---|---|
+| D-01a | Use capability-owned schemas and enforcement; reuse Configuration's scoped, governed-value machinery where its public contract fits | Proposed; evidence-backed, not formally adopted | Specify schema registration, storage authority, versioning and runtime activation before approval |
+| D-01b | Keep Profile's `locale` and `zoneinfo` authoritative; do not create competing personal preferences in Configuration | Verified existing ownership; proposed integration convention | Examine `iam-integration/CONTRACT.md` for current resolution behaviour |
+| D-02a | Prefer organisational archetypes over an independent `organisation-model` capability unless distinct owned state and lifecycle are demonstrated | Proposed | Define candidate records and lifecycle; check against Identity's groups and Authorisation's permissions |
+| D-02b | Reporting relationships do not confer permissions, groups or resource ownership | Verified governing boundary | Preserve in any future archetype design |
+| D-01c | Resolve Configuration/Identity/Authorisation ADR-0012 composition gaps as targeted integration work, not broad rewrites | Finding | Separate design and measured acceptance review; no implementation now |
+
+Review approval of this document does not amend the governing architecture.
