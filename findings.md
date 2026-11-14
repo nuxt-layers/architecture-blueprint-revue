@@ -144,3 +144,15 @@ The governing catalogue already distinguishes the candidate domains `product`, `
 The principal consistency risk is simultaneously publishing stock availability to several eventually consistent channels. Inventory must own reservations and available-to-promise, while connectors publish bounded projections and report delays, failures and reconciliation state. Cross-capability transactions cannot be treated as atomic; use public commands, durable owner outboxes, idempotency and explicit failure/compensation handling. Staff membership and group/site context determine authorised access, not domain ownership or a new group hierarchy.
 
 Root `CONTRACT.md` was not retrievable for the six candidate repositories Product, Pricing, Inventory, Order, Warehouse and Marketplace. This limits the review to authoritative catalogue boundaries and proposals; no implementation-readiness claims are made. The organisational archetype clarification in governing PR #34 remains **proposed** pending its merge.
+
+## Task 9 — Catalogue rationalisation and dependency gates (14 November 2026)
+
+See [`reviews/catalogue-rationalisation-dependencies.md`](reviews/catalogue-rationalisation-dependencies.md) for the full candidate disposition table and **conceptual**, not published, dependency map. Governing baseline is `architecture-rules` `2eea557fa3acbf9412fea065d2a3cdda42a764fc`, including merged PR #34; the blueprint baseline includes PR #9.
+
+**Consolidate or classify as composition/presentation by default:** `document` (Publisher), `blog` (Publisher), `workshop` (Event/Course), `shop` (retail composition), `user` and `company-console` (presentation), `application-compositions`, `api-gateway` (host routing) and generic `infrastructure` (deployment composition). `organisation-model` remains conditional on independent versioned archetype governance. The seven organisational labels are already archetypes under the governing catalogue.
+
+**Do not create default standalone Nuxt capabilities:** `uuidv7-generator` (primitive/library), `template-engine` (library), and generic `logging`, `observability`, `caching` and host infrastructure. These may be provider integrations or independently justified support components; operational importance is not by itself a state-owning capability boundary.
+
+**Retain genuinely independent domain candidates:** Reviews, Audit, Search, Reporting, Booking, Events, and core commerce Product/Pricing/Inventory/Order/Warehouse plus other distinct Finance/Logistics/Asset lifecycles. Process, Task, Project, Training, Enrolment, Membership, Marketplace and Location require specific owned-state/lifecycle proofs. This does **not** approve new repositories or imply implementation availability.
+
+The dependency map distinguishes host composition, required public ports, optional integrations, business events and Nuxt extension edges; no invented `capability.json` requirements are asserted. Require combined acyclic graph validation and explicit absence/fail-closed semantics before candidate implementation.
