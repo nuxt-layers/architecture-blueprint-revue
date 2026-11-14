@@ -96,3 +96,13 @@ Review the contracts relevant to unresolved boundaries, particularly `profile`, 
 - **Provisional disposition:** no new `organisation-model` repository or capability yet; retain classification as unresolved. Do not infer that organisational archetypes may be persisted as generic Configuration keys without validating schema limits, revision semantics, and business invariants.
 
 **Further work:** decide exactly where a resolver adapter belongs and how locked values interact with personal preferences; evaluate archetype lifecycle with a few concrete company, club and retail cases; reconcile `iam-integration/CONTRACT.md` separately before treating it as a reliable consumer handover.
+
+## Task 4 — Capability Discovery and Registry (14 November 2026)
+
+Full evidence and proposed model: [`reviews/capability-discovery-registry.md`](reviews/capability-discovery-registry.md).
+
+The Capability Standard §4 already mandates Nuxt-layer `capability.json` metadata with provided and required contracts; non-Nuxt packages use `CONTRACT.md` and public exports without a universal manifest. ADR-0016 separately declares direct Nuxt extension edges alongside contract dependencies and requires a jointly acyclic graph. These metadata declarations do not replace the owner contract.
+
+Reviewed public contracts show that Identity's ability to operate securely depends on required providers, Publisher's installed package does not reveal its host-registered document types or a viewer's permissions, and Configuration's installed package does not reveal its host-declared setting keys or effective viewer values. Consequently, **installed**, **composed**, **operational**, **enabled**, **permitted** and **public** must not be conflated.
+
+**Recommendation, not normative:** no new persistent registry capability. Generate an application-owned read-only inventory from selected package metadata and explicit composition declarations at build/deployment; validate compatibility, missing required dependencies and combined service/extension cycles. Runtime availability and permissions must remain owner-provided queries and server-side decisions. A universal cross-package manifest needs separate schema approval under the existing standard. No actual capability manifests were inspected or implementation availability proven in this review.
