@@ -176,3 +176,23 @@ See [`reviews/multichannel-commerce-warehouse.md`](reviews/multichannel-commerce
 | CW-12 | Governing catalogue organisational-archetype PR #34 is independent and not yet merged into `master` | Pending governing approval |
 
 Potential follow-up: consolidate unresolved domain candidates and foundation dependencies, then perform a blueprint-to-ADR change-impact review before proposing any further normative rule changes.
+
+## Task 9 — Catalogue Rationalisation and Dependencies (14 November 2026)
+
+Detailed classification and dependency review: [`reviews/catalogue-rationalisation-dependencies.md`](reviews/catalogue-rationalisation-dependencies.md). All directions here remain review proposals unless independently covered by accepted governing rules.
+
+| ID | Proposed decision | Status |
+|---|---|---|
+| CR-01 | Preserve catalogue vocabulary but reclassify redundant names rather than implying a repository per item | Proposed |
+| CR-02 | Default `document`, `blog`, `workshop`, `shop`, `user` to existing owner, composition or presentation | Proposed; require independent lifecycle evidence for exceptions |
+| CR-03 | Defer standalone `organisation-model` pending archetype governance-state proof | Proposed continuation of D-02 |
+| CR-04 | Treat generic logging, observability, cache, API gateway and deployment as host/infrastructure composition first | Proposed; provider-neutral utilities may still be justified |
+| CR-05 | Preserve candidate ownership for Audit, Reviews, Search, Reporting, Booking, Events and distinct commerce/financial domains | Proposed, not repository approval |
+| CR-06 | Process, human Task and Project need demonstrable independent lifecycle before implementation | Proposed |
+| CR-07 | External Amazon/eBay selling does not itself justify a multi-seller Marketplace capability | Proposed; follows CW-03 |
+| CR-08 | Do not automatically collapse invoicing, billing, accounting and payments into Order | Proposed; preserve domain/legal invariants |
+| CR-09 | Treat dependency map as illustrative until published owner contracts and manifests prove required/optional edges | Open validation requirement |
+| CR-10 | Follow review approval with a narrowly scoped governing catalogue classification PR | Proposed; no governing changes in this PR |
+| CR-11 | Conduct a blueprint-wide accepted-authority/ADR-impact review before normative amendments | Proposed next workstream |
+
+Next: proposed catalogue clarification, then consolidate outstanding decisions and specify precisely which ADRs or standards—if any—require amendment. No implementation or new runtime package is approved here.
