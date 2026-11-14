@@ -3,7 +3,7 @@
 **Status:** Blueprint classification proposal, not a governing catalogue amendment or implementation decision.  
 **Reviewed:** 14 November 2026.  
 **Governing baseline:** `nuxt-layers/architecture-rules` `master` at `94210cb938f7e3945d933b903cc7a9d71e3a18e7`.  
-**Authority:** `docs/catalogue.md` (Organisational archetypes versus business domains and Candidates), `docs/identity.md`, Capability Standard, ADR-0001, ADR-0002, ADR-0003, ADR-0016. **Review precedent:** `decisions.md` D-02, D-02a–d and `proposals/membership-governance-publication.md`. No implementation source or unrelated repository was inspected.
+**Authority:** `docs/catalogue.md` (Organisational archetypes versus business domains and Candidates), `docs/identity.md`, Capability Standard, ADR-0001, ADR-0002, ADR-0003, ADR-0016. **Review precedent:** [`records/decisions.md`](../records/decisions.md) D-02, D-02a–d and [`proposals/membership-governance-publication.md`](../proposals/membership-governance-publication.md). No implementation source or unrelated repository was inspected.
 
 ## 1. The problem and the classification test
 
