@@ -1,4 +1,4 @@
-# Nuxt Layers — Architecture Blueprint Revue
+# Nuxt Layers — Architecture Blueprint Review
 
 **Status:** Non-normative architectural design and review workspace.
 
