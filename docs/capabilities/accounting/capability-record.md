@@ -3,7 +3,7 @@
 **Status:** Proposed conceptual domain capability; not an implementation specification or evidence of an existing package.  
 **Review sequence:** First directory alphabetically under `docs/capabilities/`, reviewed 14 November 2026.  
 **Governing authority:** `nuxt-layers/architecture-rules/docs/catalogue.md`, consulted on `master` (governing definition: Accounting owns ledger, journal, periods and reconciliations, not originating sales or warehouse transactions).  
-**Related blueprint evidence:** [Multi-channel commerce and warehouse review](../../../reviews/multichannel-commerce-warehouse.md), especially the separate financial lifecycles and outstanding CW-10.  
+**Related blueprint evidence:** [Multi-channel commerce and warehouse review](../../../reviews/multichannel-commerce-warehouse.md), especially the separate financial lifecycles and outstanding CW-10. The `nuxt-layers/integrations` repository exists, but its root `CONTRACT.md` was not retrievable in this inspection, so the connector contract and implementation remain **unverified**.  
 **Evidence boundary:** An inspection of the `nuxt-layers` repository list found **no `nuxt-layers/accounting` repository**. A direct repository lookup returned 404; consequently no Accounting `CONTRACT.md`, package exports, manifests, tests or implementation were inspected. This is a finding about the checked repository, not a claim that no accounting solution or design exists elsewhere.
 
 ## Capability Name
@@ -24,7 +24,7 @@ Do not treat a catalogue entry as completed software or a merged design review a
 
 Record and maintain a trustworthy financial account of an organisation's economic transactions over time: **what value was recognised, where it was allocated, in which accounting period, and how balances can be explained and reconciled**.
 
-Accounting provides financial books and evidence suitable for reporting and control. It is distinct from the commercial and operational activity that generates the underlying facts.
+Accounting provides a stable financial capability regardless of which accounting system is authoritative. It must support both its own accounting books **and** an authorised externally authoritative accounting package connected through Integrations. This is a provider-selection and authority arrangement, not two mutually exclusive products. Accounting remains the platform-facing financial boundary and is distinct from the commercial and operational activity that generates underlying facts.
 
 ## Classification
 
@@ -36,12 +36,13 @@ Accounting would be responsible for:
 
 1. **Books and accounting entities** — a clearly identified set of books, reporting context and financial period structure. Establish explicitly how an accounting entity relates to legal entities and Identity-owned groups; they need not be identical.
 2. **Chart of accounts** — account definitions, classifications, lifecycle and permitted use.
-3. **Journal entries** — dated, attributable financial postings, with a defined balancing invariant (for example, double-entry debit/credit balance for a supported accounting basis) and recorded source provenance.
+3. **Journal entries or provider mappings** — dated, attributable financial postings and a balancing invariant for locally authoritative books; when an external system is authoritative, validated mappings, source references and reconciliation evidence without claiming local postings are the authoritative ledger.
 4. **Posting and correction lifecycle** — draft/validated/posted/voided or reversed as appropriate, preserving the historical record rather than silently rewriting posted facts.
 5. **Accounting periods** — boundaries, opening/closing, adjustment restrictions and close controls.
-6. **Reconciliation** — explaining differences between internal ledger balances and external statements or authoritative source records, including documented resolution.
+6. **Reconciliation** — explaining differences between the selected authoritative books, local projections/pending actions and source records or statements, including documented resolution.
 7. **Financial balances and reports** — trial balances and other authorised financial views derived from owned journals, with traceable source and period context.
-8. **Financial control evidence** — approval requirements, posting restrictions and accountable changes, without substituting for a platform-wide Audit capability.
+8. **Financial control evidence** — approval requirements, posting restrictions, authority-mode changes and accountable actions, without substituting for a platform-wide Audit capability.
+9. **Authority selection and continuity** — determine the accounting authority for each approved accounting context, use local books when no external accounting system is configured, and delegate accounting actions to a configured authoritative external system through Integrations. Do not run competing authoritative ledgers.
 
 These are **conceptual candidate responsibilities**, not assertions about implemented schemas or API methods.
 
@@ -64,9 +65,20 @@ Do not create a second financial source of truth in Integrations, Reporting, Ord
 
 ## Conceptual lifecycle
 
-**Accounting books and periods:** establish approved chart of accounts and book context → accept/validate source evidence → prepare journal → approve where required → post immutably → reconcile → adjust/reverse through recorded entries → close period → preserve/export financial evidence under applicable retention rules.
+**Accounting books and periods:** establish accounting context and approved authority → accept/validate source evidence → prepare or delegate the authorised action → approve where required → post locally or obtain verified provider confirmation → reconcile → adjust/reverse through the authoritative system → close period → preserve/export financial evidence under applicable retention rules.
 
-A finalised journal should not be silently edited or deleted. Corrections are explicit and auditable. Whether all journals require double entry, how multiple currencies are represented, and what constitutes a legally closed period require separate accounting-policy decisions.
+A finalised journal should not be silently edited or deleted. Corrections are explicit and auditable. This applies both to locally owned financial journals and the platform's records of externally confirmed actions. Whether all locally posted journals require double entry, how multiple currencies are represented, and what constitutes a legally closed period require separate accounting-policy decisions.
+
+### Accounting authority modes
+
+| State | Authority for accounting actions | Expected behaviour |
+|---|---|---|
+| **Internal accounting** | Accounting's own approved books | Default when **no authoritative external accounting connection is configured** for the accounting context. Accounting validates, posts, corrects and reconciles under its own policies. |
+| **External accounting** | Selected external accounting package, such as Xero or QuickBooks | A properly configured, authorised connector through **Integrations** routes supported accounting actions to that system; local state is a mapped projection, evidence, or pending action, **not a competing authoritative ledger**. |
+| **External configured but unavailable** | External system **retains authority** | Do not automatically post to local books. Mark requests pending, queue only if designed and safe, or refuse them. Expose failures and reconcile on recovery. |
+| **Authority changing** | Explicitly governed transition | Activation, replacement and removal require an authorised cut-over, opening balances, mapping, outstanding-work reconciliation and provenance; an absent connector after previously being authoritative does not automatically make local books primary. |
+
+**Authority is scoped** to an approved accounting entity/book and context, not inferred globally from the mere presence of an Integrations package. The platform must not permit two simultaneous writers to claim the same authoritative books. The public Accounting contract, if developed, should provide consistent business semantics in both modes without exposing Xero/QuickBooks SDK types or treating Integrations as the owner of financial records.
 
 ## Dependencies
 
@@ -84,7 +96,7 @@ Required versus optional service ports, failure modes, event schemas and depende
 
 ## Optional integrations
 
-Subject to independent design: invoicing, billing, payments, sales/orders, stock valuation, banking feeds, external accounting systems, reporting, audit/evidence and export. An external accounting provider would be an **integration adapter**, not silently a replacement owner of platform journal records. The choice between internally owned books and externally authoritative accounts remains open.
+Subject to independent design: invoicing, billing, payments, sales/orders, stock valuation, banking feeds, external accounting systems, reporting, audit/evidence and export. **Integrations** owns provider-connection configuration, transport and adapter concerns under its eventual verified public contract. A selected Xero, QuickBooks or other provider may be the authoritative accounting system for an approved accounting context; **Accounting** keeps responsibility for the platform-facing accounting semantics, authority selection, validation, reconciliation and protection against dual posting. The provider is not a second platform `accounting` capability, and Integrations must not become the owner of accounting business rules.
 
 ## Version
 
@@ -108,7 +120,7 @@ These are possible future business functions, **not documented exported function
 
 ## Configuration (conceptual)
 
-Potential organisational/accounting policy decisions include accounting basis, fiscal year and periods, functional and transaction currencies, rounding, chart of accounts, approval thresholds, retention, reporting policies, and source-system mappings. **Configuration's** responsibility and any host-supplied policy declarations must be reviewed: business accounting policy cannot become unauthorised generic settings that override ledger invariants.
+Potential organisational/accounting policy decisions include **authority mode per accounting context**, authorised external connection identifier, migration/cut-over state, accounting basis, fiscal year and periods, functional and transaction currencies, rounding, chart of accounts, approval thresholds, retention, reporting policies, and source-system mappings. A configured connector must be explicitly activated as an accounting authority; connection existence alone is not activation. **Configuration's** responsibility and any host-supplied policy declarations must be reviewed: business accounting policy cannot become unauthorised generic settings that override ledger invariants.
 
 No keys, values, APIs, database type, infrastructure provider or user interface are specified here.
 
@@ -116,19 +128,23 @@ No keys, values, APIs, database type, infrastructure provider or user interface 
 
 - **Invoice / Billing / Payment Gateway / Subscription:** financial source evidence and separate business lifecycles.
 - **Order / Inventory / Warehouse:** commercial/operational source facts without double ownership.
-- **Reporting:** derived analytics and financial views should not supplant the authoritative accounting journal.
+- **Integrations / external accounting providers:** optional configured Xero, QuickBooks or comparable connectors, with explicit authority selection and governed transition. Provider capabilities and API limits must be verified before implementation.
+- **Reporting:** derived analytics and financial views should not supplant whichever ledger is authoritative for the accounting context.
 - **Groups / Organisation:** groups can own and control accounting resources through authorised relationships, but a legal/accounting entity may span or differ from an Identity group.
 - **Workflow / Scheduler / Message Queue:** potential approval, period-end or event-delivery mechanisms, not accounting-state owners.
 
 ## Open architectural decisions
 
-1. Is Accounting intended to own a full internal ledger, or is the platform initially an integration with an external accounting system? The ownership model changes substantially.
+1. **Dual-mode support is the proposed requirement:** internal books are primary when no external authority has been configured; a selected external accounting package becomes authoritative upon approved activation. Define the precise accounting-context scope, supported functions and non-overlap guarantees.
 2. How do group ownership, tenant isolation, legal entities, multiple books, branches and consolidated accounts relate?
 3. Which accounting basis and applicable jurisdictions are in scope? Which validations are invariants versus configurable policies?
 4. Who determines and approves invoice-to-journal, refund, payout, exchange-rate, tax and stock-valuation treatments?
 5. Which source facts are authoritative and how are duplicate, delayed, corrected or missing transactions reconciled?
 6. Which posting and period-close operations require separation of duties, reauthentication and immutable evidence?
 7. What minimum viable accounting lifecycle would establish an independent owner without prematurely building invoicing, banking or general financial ERP functionality?
+8. Which actions and financial objects are covered by external authority, including unsupported provider features, and how is consistent accounting semantics preserved across connectors?
+9. How is internal-to-external and external-to-internal cut-over performed: mapping, opening balances, unreconciled transactions, posted history, duplicates and rollback?
+10. What happens when the external connection is degraded, revoked, paused or removed, without silent local fallback or loss of accounting evidence?
 
 ## Conceptual acceptance scenarios (not implementation tests)
 
@@ -137,8 +153,11 @@ No keys, values, APIs, database type, infrastructure provider or user interface 
 - A closed period rejects or routes late changes according to an explicitly approved adjustment policy.
 - A person who belongs to two groups sees and operates only on appropriately authorised books; loss of membership removes authority without erasing lawful records.
 - A payment-provider payout differs from an invoice or bank statement; reconciliation exposes and resolves the difference without rewriting Order or Payment Gateway records.
-- An external ledger integration is unavailable; no unverified success or missing postings are concealed.
+- A newly configured Xero/QuickBooks-like connector is explicitly approved as authoritative; Accounting routes supported actions through Integrations and does not double-post locally.
+- With **no external authority ever configured**, Accounting operates its own authoritative books.
+- An authoritative external connection becomes unavailable; Accounting does **not** silently become the primary ledger, and pending/failed actions remain visible and reconcilable.
+- A group deliberately migrates back from external to local authority; the cut-over reconciles balances and outstanding work before internal posting is enabled, preserving provenance and historic source references.
 
 ## Next decision gate
 
-Review and approve the **conceptual ownership** and **scope** first, especially whether Accounting is the internal ledger owner or merely an adapter to an external finance system. Only then derive eventual owner contracts, required interfaces, storage and operational design. This record does not amend the governing catalogue or any ADR.
+Review and approve the **dual-mode accounting authority model** and the scope of authority per accounting context. Then evaluate how Integrations supplies provider connections, how cut-over and outages work, and which accounting behaviours belong to the common business contract. Only then derive interfaces, persistence and operational design. This record does not amend the governing catalogue or any ADR.
