@@ -98,6 +98,111 @@ Required versus optional service ports, failure modes, event schemas and depende
 
 Subject to independent design: invoicing, billing, payments, sales/orders, stock valuation, banking feeds, external accounting systems, reporting, audit/evidence and export. **Integrations** owns provider-connection configuration, transport and adapter concerns under its eventual verified public contract. A selected Xero, QuickBooks or other provider may be the authoritative accounting system for an approved accounting context; **Accounting** keeps responsibility for the platform-facing accounting semantics, authority selection, validation, reconciliation and protection against dual posting. The provider is not a second platform `accounting` capability, and Integrations must not become the owner of accounting business rules.
 
+## Native Accounting — minimum self-sufficient scope
+
+A **naked Accounting capability** means an organisation can use it **without any third-party accounting connection**. It must be useful, internally consistent and capable of maintaining authoritative books, not just a placeholder API waiting for Xero or QuickBooks.
+
+**Minimum native accounting functions (conceptual):**
+
+| Area | Essential native behaviour | Explicit boundary |
+|---|---|---|
+| Accounting context and books | Create and administer books for an explicitly identified accounting entity, ownership context and financial basis | Identity groups are access/ownership contexts, not automatically legal entities |
+| Chart of accounts | Define account codes, types, active/inactive state, permitted posting and controlled changes | No forced universal chart across jurisdictions or different entities |
+| Accounting periods | Define fiscal calendar, open/closed periods and governed adjustments | Clock handles time semantics; accounting policy decides eligible periods |
+| Journals and double entry | Draft, validate, authorise and post balanced entries with debit/credit sides, account and currency context, source reference, date, identity and provenance | No silent mutation/deletion of posted entries; reversal and correcting entries are distinct facts |
+| Balances | Calculate account balances, opening/closing balances and trial balance with a reliable as-of date/period | No unsupported inference that balances equal cleared bank funds |
+| Bank and control reconciliation | Import or enter verified statement lines, match financial transactions, track unmatched items and resolve discrepancies | Accounting does not become a payment processor or bank account credential store |
+| Corrections and auditability | Controlled reversal, reclassification, adjustment, posting-history evidence, period lock and authorised access | Other capability Audit/Legal Compliance duties remain independent |
+| Financial outputs | General ledger, journal listing, trial balance and simple period summaries with traceable lines | Full tax returns, payroll, statutory filings and advanced consolidation are not assumed in the initial scope |
+| Data portability | Export a complete supported accounting dataset with schema/semantics and provenance; validate a proposed import before authority transfer | Import is not automatic reconciliation or approval of imported balances |
+
+The native minimum should cover a full small-organisation ledger lifecycle: opening balances → balanced journals → corrections → reconciliation → period close → verifiable reports and export. External providers may expose richer functions, but **absence of an external connector must never leave this native cycle incomplete**.
+
+**Financial correctness principles:** postings must balance within the applicable ledger currency/basis; amounts must have defined decimal precision, currency and rounding policy (no floating-point money); distinguish transaction, posting and effective dates; identify accounting entity and period; prevent double posting on repeated requests; record source document, correction and user/system provenance; apply authorisation, separation of duties and lawful retention. Exchange rates, tax treatment and jurisdictional rules require separately governed policy and cannot be guessed.
+
+## Conceptual public Accounting interfaces
+
+These are **responsibility-level contract surfaces**, not TypeScript names, HTTP routes, SDK calls, an approved `CONTRACT.md` or a new manifest. They should remain recognisable whether the selected authority is native or external.
+
+| Contract surface | Typical operations / information | Who interprets the result |
+|---|---|---|
+| **Accounting authority** | Identify the approved accounting context/book, authority mode, supported provider, activated version, restrictions, health and cut-over state | Accounting; operating context must be resolved before every financial mutation |
+| **Books and accounts** | Create/read book, list/validate chart, propose/change account, identify currencies and fiscal basis | Native books or selected authoritative provider through adapter |
+| **Periods** | List/open/close/reopen under controlled policy, determine permitted posting period | Accounting-authorised business action, not Scheduler-owned state |
+| **Journal posting** | Propose, validate, approve, post, reverse, adjust, retrieve status and original/compensating references | Selected authority; distinguish accepted request from confirmed posting |
+| **Balances and financial reporting** | Get trial balance, account history and period financial views with source, freshness and reconciliation status | Selected authority, optionally cached/read-projected with explicit provenance |
+| **Reconciliation** | Present statement/source records, match, explain variance, approve adjustment, record result | Accounting with authorised evidence from external statement/finance owners |
+| **Import/export and migration** | Describe portable dataset, validate mappings, preview import, verify reconciliation, commit cut-over, report exceptions | Accounting controls financial meaning; Integrations supplies external transport |
+| **Provider capabilities and sync health** | Determine whether a provider supports a requested operation, permissions/scopes, confirmation/read-back, retry/idempotency and last verified sync | Adapter declares provider constraints; Accounting blocks or safely limits unsupported actions |
+| **Financial event exchange** | Ingest owner-validated source facts; publish accounting-owned facts such as journal posted, period closed or reconciliation completed | Source owners keep original events; MQ transports events without becoming the ledger |
+
+At a minimum, mutation requests need **accounting context, actor/authority context, source reference, correlation and idempotency key, requested business action, and expected version/concurrency evidence where relevant**. Responses must differentiate `accepted/pending`, `confirmed`, `rejected`, `unavailable`, `conflict`, and `requires reconciliation`; never report a posting as successful merely because an API request was queued or acknowledged.
+
+**Consumer separation:** Order, Invoice, Billing and Payments use published financial operations or emit source facts for Accounting to interpret. They must not contain Xero/QuickBooks-specific branches or write Accounting's tables directly. Accounting owns its conceptual port; Integrations and optional provider adapters implement the transport-facing side under a verified, provider-neutral contract.
+
+### Provider differences must be explicit
+
+Do not assume every provider implements journals, periods, contacts, accounts, reporting, currencies, corrections or bank reconciliation with identical semantics. A connector must expose a **supported-operation and constraint description**, including account scope, API and permission limits, posting model, remote read-back, rate limits and non-reversible operations.
+
+The Accounting boundary may offer a common **portable core**, but must not invent equivalent behaviour for a provider that lacks it. An unsupported operation is refused, explicitly routed to an authorised provider-specific workflow, or supported only by a separately justified local *non-authoritative* aid; never silently posted into local books while external authority is active.
+
+## Converting and synchronising native and external accounting
+
+**This is a governed change of authority, not merely field-format conversion.** A connector translates provider-specific structures; Accounting interprets financial meaning, decides which ledger is authoritative and validates the transition. Conversion must work in **both directions** wherever the supported provider permits usable export/import, with explicit capability limits.
+
+### Canonical meaning and provider mappings
+
+Define a **provider-neutral interchange model** for the agreed portable accounting core, without assuming it can express every provider feature losslessly:
+
+- Identity of accounting entity, book, periods, account classifications, currencies and chart mapping.
+- Posted journal header and balanced lines, posting/effective dates, references, corrections/reversals and period state.
+- Opening/closing balances and selected reconciliation state, statement references and source provenance.
+- Counterparty/customer/supplier references **only as authorised references**; do not absorb Profile, Order or Invoice data.
+- Stable internal IDs and remote IDs, mapping versions, original-source IDs, origin direction, sync watermark, date/time interpretation, rounding and currency conversion rules.
+
+**Mapping rules** must specify account-code equivalents, unsupported account types, fiscal period differences, tax-code references, currencies/exchange rates, contact/invoice references and journal correction semantics. Record unsupported or lossy mappings as **blocking exceptions requiring explicit resolution** where financial meaning or auditability would be compromised. Keep original records/source references for traceability; do not silently reinterpret historic postings.
+
+**Where mappings live:** Accounting owns approved financial meanings and conversion policy; Integrations/connector owns connection metadata, provider DTO translations, remote identifiers and transport checkpoints. They may reference each other by documented identifiers, but cannot both become authoritative for the same mapping fact without an approved split. No connector directly modifies internal Accounting persistence.
+
+### Controlled cut-over — internal → external
+
+1. **Authorise and scope:** select accounting entity/book, provider connection, effective cut-over boundary, responsible approver, supported operations and applicable privacy/legal checks.
+2. **Discover and preflight:** inspect connector capabilities, remote accounts/periods/currencies, schema versions, access scopes, import/export routes, provider restrictions and outstanding local postings.
+3. **Map and dry run:** map chart/accounts, financial categories, source documents, tax and currency treatment; preview a candidate migration dataset and flag incompatible/lossy records.
+4. **Establish a consistent boundary:** lock or coordinate financial mutations for the transitioning books, capture a definitive journal/checkpoint snapshot and decide how in-flight source events are held or replayed. No dual authoritative writers.
+5. **Transfer:** create/identify target accounts and deliver only approved importable records or opening balances. Record mapping versions, receipts, rejected lines, batch and idempotency/correlation identities. Provider-specific limits determine the available migration depth.
+6. **Reconcile and sign off:** independently compare trial balances by account and currency/period, opening balances, reconciled items and unresolved differences; confirm the target's posted/accepted state by provider read-back where possible. Do not treat network success as business success.
+7. **Activate authority:** after explicit approval, record an immutable authority transition and enable the external route; preserve local historic books as **read-only evidence** for the pre-cut-over period. Release held new work through the selected authority without double posting.
+8. **Monitor and recover:** detect missing, duplicated, late and out-of-order events; reconcile source documents to confirmed postings and track exceptions. A failed migration must keep or restore a single known authority under a documented recovery procedure, not guess that rollback succeeded.
+
+### Controlled cut-over — external → internal or external → another provider
+
+Use the same gates in reverse, but obtain a **provider-verified export or equivalent supported financial evidence** first. Verify period cut-off, mappings and currency treatment; reconstruct supported journals **or** establish approved opening balances with linked immutable historical archives where full ledger transfer is impossible. Load and reconcile locally **before** authorising local posting. A change from one provider to another proceeds through the same neutral validation and reconciliation boundary; it need not perform an uncontrolled double-hop through live local books.
+
+Do not promise reversible migration, exact preservation of remote IDs, historical transaction editing or an identical feature set across providers. Provider export/API permissions and terms may prevent full transfer. In that case present the limitations, preserve accessible evidence and require a documented decision about what can legally and correctly be imported.
+
+### Ongoing synchronisation while external is authoritative
+
+- **Write route:** Accounting validates the business command and delegates it to the selected connector. No parallel authoritative local write.
+- **Read route:** authoritative provider read or clearly identified local projection with **last-confirmed timestamp, freshness, source and completeness**, never a projection masquerading as confirmed books.
+- **Delivery:** owner-owned outbox/source evidence and connector checkpoints support at-least-once processing; idempotency, remote ID matching and reconciliation prevent duplicate financial effects. Exactly-once distributed execution must not be assumed.
+- **Inbound change:** verified webhook/poll response is authenticated, tenant/account scoped, de-duplicated, mapped and passed to Accounting for business validation. Record origin to prevent echo loops.
+- **Conflicts:** chosen authority wins for its books, but contradictory evidence is recorded and escalated; do not silently overwrite locally initiated pending transactions.
+- **Outages / deactivation:** external authority remains selected until a governed cut-over. Record pending/unknown outcomes; never silently start local posting or claim provider success.
+- **History and retention:** store only the minimum permitted local projections, audit evidence and immutable references, observing access, confidentiality, provider terms, lawful retention and erasure/hold rules.
+
+### Conversion acceptance cases
+
+- Native-only organisation creates chart, posts balanced journals, corrects a posting, reconciles a bank statement, closes a period and exports its ledger without Integrations configured.
+- Internal → external conversion with compatible chart/journal mappings produces reconciled balances and a single post-cut-over authority.
+- Connector supports opening-balance import but not journal history: transition explicitly preserves the old ledger as historical evidence and records the loss of transactional portability.
+- A chart mapping changes during migration: preflight and commit detect the version conflict and refuse an unreviewed transfer.
+- External provider accepts a request but confirmation is lost: Accounting reports **unknown/pending**, uses idempotency/remote reference checks and reconciliation, not duplicate posting.
+- A provider webhook arrives twice or out of order: deduplication and provenance prevent duplicate financial effects.
+- External system becomes unavailable: Accounting does not switch to internal books; recovery or an authorised reverse cut-over is required.
+- External → native transition reconstructs verified journals or approved opening balances, reconciles and activates internal authority **only after** cut-over sign-off.
+- Two accounting entities under one group have different authority modes without cross-book postings or data leakage.
+
 ## Version
 
 **Conceptual record:** initial draft. **Implementation/package version:** not applicable / not verified.  
@@ -108,6 +213,8 @@ Once defined, accounting policies, chart structures, source event mappings and r
 No `nuxt-layers/accounting` repository or root `CONTRACT.md` was found in the inspected organisation. The catalogue is a **candidate**, not software availability. Application installation, activation and operational health have **not been checked**.
 
 ## Capabilities offered (conceptual)
+
+The **native core is the baseline**, not a fallback mock or a provider-only shell. The interfaces and accounting results described above should remain meaningful with no third-party connection. An external authority adds delegation and synchronisation, not a second parallel financial truth.
 
 - Maintain accounting books and charts of accounts.
 - Accept validated postings with source attribution and balancing controls.
