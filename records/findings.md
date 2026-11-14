@@ -99,7 +99,7 @@ Review the contracts relevant to unresolved boundaries, particularly `profile`, 
 
 ## Task 4 — Capability Discovery and Registry (14 November 2026)
 
-Full evidence and proposed model: [`reviews/capability-discovery-registry.md`](reviews/capability-discovery-registry.md).
+Full evidence and proposed model: [`reviews/capability-discovery-registry.md`](../reviews/capability-discovery-registry.md).
 
 The Capability Standard §4 already mandates Nuxt-layer `capability.json` metadata with provided and required contracts; non-Nuxt packages use `CONTRACT.md` and public exports without a universal manifest. ADR-0016 separately declares direct Nuxt extension edges alongside contract dependencies and requires a jointly acyclic graph. These metadata declarations do not replace the owner contract.
 
@@ -109,7 +109,7 @@ Reviewed public contracts show that Identity's ability to operate securely depen
 
 ## Task 5 — External Application Integrations (14 November 2026)
 
-See [`reviews/external-application-integrations.md`](reviews/external-application-integrations.md) for the complete ownership and lifecycle review.
+See [`reviews/external-application-integrations.md`](../reviews/external-application-integrations.md) for the complete ownership and lifecycle review.
 
 - The governing Capability Catalogue lists `integrations` as a Platform capability for external service adapters; the Capability Standard distinguishes provider-specific connectors from business capabilities and ADR-0015 infrastructure integration libraries. The proposed connection-management responsibility is **not yet established as an implemented public contract**.
 - Root `CONTRACT.md` could not be retrieved for `nuxt-layers/integrations`, `message-queue` or `workflow` on `master`; this is an evidence gap, not proof of non-existence or a licence to inspect private implementation.
@@ -119,7 +119,7 @@ See [`reviews/external-application-integrations.md`](reviews/external-applicatio
 
 ## Task 6 — Workflow, Process, Task and Temporal execution boundaries (14 November 2026)
 
-Full review and acceptance cases: [`reviews/workflow-process-task-execution.md`](reviews/workflow-process-task-execution.md).
+Full review and acceptance cases: [`reviews/workflow-process-task-execution.md`](../reviews/workflow-process-task-execution.md).
 
 The authoritative catalogue establishes `scheduler` (runs owners' scheduled handlers), `message-queue` (delivers owners' outbox events) and `workflow` (review, sign-off and approval routes), while `temporal-gateway` is an ADR-0015 framework-independent infrastructure integration library that **does not** own business scheduling, orchestration, event delivery or persistence. `process` (business process definitions/outcomes) and `task` (assigned human work) remain candidates, not approved additional repositories.
 
@@ -129,7 +129,7 @@ Root `CONTRACT.md` was not retrievable for Scheduler, Workflow, Message Queue, T
 
 ## Task 7 — Organisational candidate consolidation (14 November 2026)
 
-See [`reviews/organisation-candidate-consolidation.md`](reviews/organisation-candidate-consolidation.md) for a focused classification review against `architecture-rules/docs/catalogue.md`, `docs/identity.md` and ADR-0016.
+See [`reviews/organisation-candidate-consolidation.md`](../reviews/organisation-candidate-consolidation.md) for a focused classification review against `architecture-rules/docs/catalogue.md`, `docs/identity.md` and ADR-0016.
 
 The seven labels `organisation`, `business`, `company`, `club`, `committee`, `department` and `office` already fit the Identity-owned group context and schema-validated organisational archetype model. None should be presumed an independent Nuxt capability from its label alone. Recommend treating each as an archetype or application composition **by default**, while preserving genuinely independent business lifecycles such as statutory entity records, formal committee votes, club subscriptions, facility records and domain operations as separately justified candidate owners.
 
@@ -137,7 +137,7 @@ Identity remains the only authority for groups, hierarchy and ordinary membershi
 
 ## Task 8 — Multi-channel Commerce and Warehouse boundaries (14 November 2026)
 
-Full design review and acceptance cases: [`reviews/multichannel-commerce-warehouse.md`](reviews/multichannel-commerce-warehouse.md).
+Full design review and acceptance cases: [`reviews/multichannel-commerce-warehouse.md`](../reviews/multichannel-commerce-warehouse.md).
 
 The governing catalogue already distinguishes the candidate domains `product`, `pricing`, `inventory`, `order`, `warehouse`, `logistics`, `billing`, `invoice`, `payment-gateway` and `accounting`. A retail `shop` can primarily be an application composition. Selling on Amazon/eBay through external connectors does **not** automatically justify a new multi-seller `marketplace` capability. Warehouse physical work must not duplicate Inventory's canonical movements/balances, while Order preserves canonical commercial commitments and accepted price snapshots.
 
@@ -147,7 +147,7 @@ Root `CONTRACT.md` was not retrievable for the six candidate repositories Produc
 
 ## Task 9 — Catalogue rationalisation and dependency gates (14 November 2026)
 
-See [`reviews/catalogue-rationalisation-dependencies.md`](reviews/catalogue-rationalisation-dependencies.md) for the full candidate disposition table and **conceptual**, not published, dependency map. Governing baseline is `architecture-rules` `2eea557fa3acbf9412fea065d2a3cdda42a764fc`, including merged PR #34; the blueprint baseline includes PR #9.
+See [`reviews/catalogue-rationalisation-dependencies.md`](../reviews/catalogue-rationalisation-dependencies.md) for the full candidate disposition table and **conceptual**, not published, dependency map. Governing baseline is `architecture-rules` `2eea557fa3acbf9412fea065d2a3cdda42a764fc`, including merged PR #34; the blueprint baseline includes PR #9.
 
 **Consolidate or classify as composition/presentation by default:** `document` (Publisher), `blog` (Publisher), `workshop` (Event/Course), `shop` (retail composition), `user` and `company-console` (presentation), `application-compositions`, `api-gateway` (host routing) and generic `infrastructure` (deployment composition). `organisation-model` remains conditional on independent versioned archetype governance. The seven organisational labels are already archetypes under the governing catalogue.
 
@@ -159,7 +159,7 @@ The dependency map distinguishes host composition, required public ports, option
 
 ## Task 9 addendum — Models, Procedures, Projects, Tasks and scheduled Events (14 November 2026)
 
-The amended [catalogue rationalisation review](reviews/catalogue-rationalisation-dependencies.md#9-model-definition-instance-and-lifecycle-review--additional-findings) incorporates the follow-on architectural discussion before PR #10 is merged. It distinguishes definitions, instances/occurrences, outcomes and immutable revisions; Project as a group-owned objective-driven undertaking; Task as assigned organisational work rather than an event, scheduled handler or Temporal activity; Process as business activity/outcome; and Procedure as a versioned, repeatable method that may be coordinated through Workflow. These are conceptual responsibilities pending independent lifecycle and public-contract evidence.
+The amended [catalogue rationalisation review](../reviews/catalogue-rationalisation-dependencies.md#9-model-definition-instance-and-lifecycle-review--additional-findings) incorporates the follow-on architectural discussion before PR #10 is merged. It distinguishes definitions, instances/occurrences, outcomes and immutable revisions; Project as a group-owned objective-driven undertaking; Task as assigned organisational work rather than an event, scheduled handler or Temporal activity; Process as business activity/outcome; and Procedure as a versioned, repeatable method that may be coordinated through Workflow. These are conceptual responsibilities pending independent lifecycle and public-contract evidence.
 
 The `events` candidate concerns scheduled real-world activities (classes, concerts, voyages), including one-off or recurring series with independently identified exceptions and cancellations. It is distinct from owner-published business events transported by Message Queue and technical execution events. Booking, Course and transport domains continue to own their specific authoritative operations.
 

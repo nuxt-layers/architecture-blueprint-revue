@@ -1,158 +1,156 @@
-# Capability Register — Working Design
+# Capability Register — Working Inventory
 
-**Status:** Blueprint proposal for collaborative review. **Not normative, not a deployed registry, not an approved manifest schema.**  
-**Established:** 14 November 2026.  
-**Repository:** `nuxt-layers/architecture-blueprint-revue` (the existing blueprint review repository; the spelling `revue` is intentional).  
-**Governing authority at creation:** `nuxt-layers/architecture-rules` `master` at `2eea557fa3acbf9412fea065d2a3cdda42a764fc`.  
-**Working catalogue:** [`capability-catalogue.md`](capability-catalogue.md), initially copied **verbatim** from governing `docs/catalogue.md` at that revision. The copied catalogue's relative links originally target the governing repository's `docs/` and `docs/decisions/` layout; while unmodified, they are source-relative and must not be mistaken for local blueprint documents. Use links to the governing repository for authoritative ADRs and standards.
-**Existing review:** [Capability Discovery and Application Registry](../reviews/capability-discovery-registry.md), decisions CD-01–CD-08 in [`decisions.md`](../decisions.md).
+**Status:** Non-normative, catalogue-derived register. **Implementation and operational status have not been audited.**
 
-## 1. Why keep two documents?
+**Source:** [Working Capability Catalogue](capability-catalogue.md), originally copied from the governing `nuxt-layers/architecture-rules/docs/catalogue.md` at commit `2eea557fa3acbf9412fea065d2a3cdda42a764fc`. Accepted governing rules remain authoritative.
+**Design specification:** [Capability Register Design](../proposals/capability-register-design.md).
+**Review records:** [Decisions](../records/decisions.md) · [Findings](../records/findings.md).
 
-| Document | Question it answers | Content and authority |
-|---|---|---|
-| **Capability Catalogue** (this blueprint's working copy) | What responsibilities or reusable components should exist across the platform? | Architectural vocabulary, established capabilities, proposed candidates, exclusions, ownership and classification. The governing original remains authoritative until a separate approved architecture-rules PR changes it. |
-| **Capability Register** (this document) | Which catalogue entries have been specified, implemented, integrated or used, and with what evidence? | A traceable design-time status and relationship register, plus a proposed *application-specific* read-only discovery view. Status here is evidence-based and non-authoritative for runtime operation. |
+## Purpose
 
-A catalogue entry can exist without a package. A package can be installed but not configured or operational. Being operational never implies permission to use it.
+This document is the **populated working register**, distinct from its design specification. It indexes every entry in the working catalogue without claiming that a package exists or functions. "Established" means an established architectural responsibility, **not** an implemented or operational package.
 
-The two working documents are **not** new business capabilities, runtime persistence services or competing sources of authority. This document is the design for a register; it is not a claim that the register already exists as software.
+## Catalogue-derived entries
 
-## 2. Working principles
+### Established capabilities
 
-1. **Respect accepted authority.** Existing ADRs, normative standards and each owner's root `CONTRACT.md` govern. This review may identify needed amendments but cannot override accepted provisions.
-2. **Review before changing authority.** Record reasons, alternatives, security/privacy consequences and affected contracts in the blueprint; only an expressly accepted ADR/standard/catalogue PR in `architecture-rules` makes a governance change.
-3. **One owner per authoritative fact.** A register references owned records; it does not own capabilities' business data, permissions, secrets, operational status or policy.
-4. **Separate concept from implementation.** A capability, library, connector, archetype, composition or presentation may be recorded without implying a standalone repository or Nuxt Layer.
-5. **Evidence rather than assumption.** An absent root contract, stale status, missing data or failed probe is **unknown/not verified**, not proof that an implementation does not exist.
-6. **Portability.** Nuxt layers use their existing `capability.json` and public `CONTRACT.md`. Framework-independent capabilities and libraries use their public contract and package exports. No new universal manifest is imposed.
-7. **Dependencies remain directional and acyclic.** Track public service dependencies separately from Nuxt `extends` and declarative specialisation; verify the combined code/runtime dependency graph where applicable. Events alone are not compile-time dependency edges.
-8. **Limit privileges.** A register entry cannot execute arbitrary code, install packages, disclose protected data or grant authorisation. A UI hiding/showing an operation is not an access decision.
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `theme-manager` | Foundation | Established | Theme definitions, the semantic token vocabulary, contrast checks, selection and preferences; the only authority for the effective theme |
+| `clock` | Foundation | Established | Canonical date/time values, parsing, formatting, temporal arithmetic, time zones and clock services |
+| `configuration` | Foundation | Established | The facts a site, tenant or group states about itself, changed through approvals |
+| `identity` | Foundation (IAM) | Established | Identities, each person's personal group, groups, the single-parent hierarchy, tenants and memberships with their lifecycle; no personal data beyond opaque identifiers |
+| `authentication` | Foundation (IAM) | Established | Credential verification, sign-in identifiers, sessions, rotation, revocation and reauthentication |
+| `authorisation` | Foundation (IAM) | Established | Server-side, resource-aware access decisions, with no implicit inheritance through the group hierarchy |
+| `profile` | Foundation (IAM) | Established | The personal data describing a person, keyed by an Identity identifier: what each context may see, under the person's control, and their access, correction, export and erasure requests |
+| `iam-integration` | Foundation (IAM) | Established | The IAM suite's architecture, cross-capability processes and the adapters connecting its members ([ADR-0005](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0005-iam-suite.md)); no data of its own |
+| `rich-text` | Library | Established | The one safe formatted-text format, its profiles, checks and safe tree; never renders ([ADR-0011](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0011-shared-rich-text-and-configurable-copy.md)) |
+| `publisher` | Platform | Established | Documents of host-registered types: drafts, versions, approval, scheduling, addresses, listings and feeds |
+| `media` | Platform | Established | Images: web-ready variants, metadata removal, alt text, group ownership and allowances; the files themselves through the Files shape ([ADR-0012](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0012-trivial-composition.md)), which the host fills with `storage` |
+| `storage` | Platform | Established | Files' bytes in an object store behind one provider-agnostic port: keys under tenant and group, signed addresses, lifecycle, backups and usage figures; no records of its own |
+| `ui` | Presentation | Established | Generic, fully styled components on Theme Manager's vocabulary; knows no capability |
+| `content-editor` | Presentation | Established | Editing screens for Publisher's documents, saving through Publisher's functions; no data of its own |
+| `gallery` | Presentation | Established | Albums and photo of the week as Publisher types over media's images; no data of its own |
+| `privacy` | Foundation | Established | Consent and retention policy, which capabilities receive and apply |
+| `legal-compliance` | Foundation | Established | The legal duties that apply to each site by jurisdiction, such as UK GDPR and the Online Safety Act, and the constraints they impose beside Authorisation's decisions, such as legal holds that block deletion |
+| `export` | Library | Established | Turning a `rich-text` safe tree into files such as PDF and .docx, extensible by format |
+| `scheduler` | Platform | Established | Running every capability's `tasks` on time, like cron, for the host |
+| `message-queue` | Platform | Established | Carrying messages that something happened, such as "password changed", from capabilities' outboxes to the capabilities that listen; not calendar events, which are the `event-service` candidate |
+| `workflow` | Platform | Established | User-defined routes for review, sign-off and approval, per type and site; fills capabilities' approval ports |
+| `content-security` | Platform | Established | Scanning what people submit for dangerous content, links and abuse, on top of each layer's own input checks |
+| `notifications` | Platform | Established | Telling people something needs them, through their chosen channels; providers' keys come from the host's secret management |
+| `comments-engine` | Platform | Established | Comments on content and their moderation |
+| `metadata` | Platform | Established | Tags, categories, taxonomies and ontologies attached to content |
+| `translate` | Platform | Established | Translation of content and its workflow |
+| `seo` | Platform | Established | Redirects, sitemaps and search-engine metadata, driven by Publisher's address events |
+| `site-hosting` | Platform | Established | Where each site is served: custom domains, proving their ownership, and finding the site for a request's address; certificates and deployment stay with the host's proxy and provider (ADR-0014) |
+| `integrations` | Platform | Established | Adapters to outside services such as Google Docs, Microsoft 365 and social feeds |
 
-## 3. Two related views, not two sources of truth
+### Infrastructure integration libraries
 
-### A. Platform design register
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `temporal-gateway` | Infrastructure integration library | Established | Shared Temporal connection, schedule, execution and worker SDK integration; no business scheduling, workflows, message transport or capability-owned persistence |
 
-A reviewed, human-readable inventory of the capabilities and other building blocks in the working catalogue. It records classification proposals, source evidence, decision status and gaps. It can track the development programme across different repositories without becoming their authority.
+### Additional architectural entries
 
-**Entry fields proposed:**
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `architecture-rules` | Architecture governance (not a runtime layer) | Governance | Governs ADRs, normative standards and this catalogue; owns no application runtime data |
+| `infrastructure` | Foundation candidate | Under consideration | Host/backend/deployment setup and operational configuration; infrastructure resources and domain data remain with the appropriate hosts/providers |
+| `reviews` | Platform candidate | Under consideration | Customer ratings, testimonials, verified purchase/service evidence, moderation, merchant replies and trustworthy reputation aggregates; transaction and identity facts remain owned by source capabilities |
+| `template-engine` | Library candidate | Under consideration | Secure deterministic template parsing, data binding and content rendering; no template persistence, document lifecycle, arbitrary code execution or business-data lookups |
+| `organisation-model` | Domain / platform boundary to be decided | Under consideration | Versioned, schema-validated organisational archetypes, positions, non-authoritative reporting relationships and capability selection; cannot reown Identity groups/memberships or Authorisation decisions |
 
-| Field | Meaning | Authoritative evidence |
-|---|---|---|
-| `identifier` | Stable name used in catalogue and design discussions | Governing catalogue or expressly labelled candidate |
-| `title` / `purpose` | Short statement of responsibility | Catalogue, accepted ADR and owner `CONTRACT.md` |
-| `classification` | Foundation, Platform, Domain, Presentation, Library, Infrastructure integration, Connector, Archetype or Composition | Governing rules; proposed values flagged as proposals |
-| `ownership` / `exclusions` | Facts/rules owned and explicitly not owned | Catalogue and public contract |
-| `governanceStatus` | Established, candidate, proposed change, superseded/consolidated | Accepted governing documents |
-| `designStatus` | Not reviewed, review in progress, proposed, review agreed, awaiting governing decision | Blueprint review records |
-| `implementationEvidence` | Repository, revision, root public contract, manifest/exports and CI/consumer acceptance evidence | Verified repository documents and checks |
-| `relations` | Public required/optional services, extension/specialisation, events and references | Owner contract, published metadata and verified composition |
-| `decisions` | Relevant ADRs, review decision IDs, outstanding questions and review date | Linked registers |
-| `sourceRevision` / `verifiedAt` | What was checked and when | Exact repository revision and dated inspection |
+### Foundation, platform and library candidates
 
-Do not invent a generic status such as “complete” from a merged review PR; completion of a design review is not implementation readiness. For implementation status, record **unknown** until source evidence is inspected.
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `audit` | Platform | Candidate | Tamper-evident accountable business/security audit evidence and review; distinct from operational Logging and Observability |
+| `caching` | Foundation | Candidate | Cache provider ports, expiration and invalidation; source capabilities remain authoritative |
+| `logging` | Foundation | Candidate | Structured technical logs, correlation and sinks; not the authoritative business audit trail |
+| `observability` | Platform | Candidate | Metrics, traces, system health and diagnostics; not logging or business auditing |
+| `uuidv7-generator` | Library candidate | Candidate | UUIDv7 identifier generation; not ownership of entities or credentials, and not automatically a Nuxt Layer |
+| `api-gateway` | Composition / platform to decide | Candidate | External API routing and exposure; not a replacement for capability APIs or server authorisation |
+| `application-compositions` | Composition artefacts | Candidate | Reusable application templates and selected capability wiring; generally not independent stateful services |
+| `company-console` | Presentation | Candidate | Cross-capability management screens; no business records |
+| `user` | Presentation | Candidate | Group-scoped user administration screens via Identity/Profile/Authorisation; no user records |
+| `document` | Platform candidate, unresolved | Candidate | Distinct document-management requirement only if Publisher's document lifecycle is insufficient |
+| `search` | Platform | Candidate | Indexing, query and relevance over authorised source records; no source-of-truth storage |
+| `location` | Platform | Candidate | Coordinates, geospatial and place references; not all postal addresses or site tenancy |
+| `reporting` | Platform | Candidate | Authorised report definitions, aggregation and output; no source transaction records |
+| `process` | Platform candidate | Candidate | Business process definitions and outcomes; execution uses Workflow/Scheduler without duplicating their responsibilities |
+| `project` | Platform candidate | Candidate | Coordinated bodies of work, milestones, responsibilities and budgets; uses Task/Process contracts where applicable |
+| `task` | Platform candidate | Candidate | Individual assigned work, goals, progress and due dates; not Temporal jobs or scheduler triggers |
+| `booking` | Domain candidate | Candidate | Reservation lifecycle, availability and capacity for resources; neither a clock nor execution scheduler |
 
-### B. Application capability inventory
+### Organisational archetypes and compositions
 
-An application-generated, **read-only descriptive artefact** about its explicitly selected packages, verified contract metadata and build/composition choices.
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `organisation` | Archetype / composition | Example, not standalone candidate | General organisational context and type; separate legal/governance records require a justified domain owner |
+| `business` | Archetype / composition | Example, not standalone candidate | Organisation-oriented business application composition; commerce, accounting and other operations retain their own domain owners |
+| `company` | Archetype / composition | Example, not standalone candidate | Organisation type with legal-entity references; statutory registration, officers or filings may warrant a separately reviewed domain |
+| `club` | Archetype / composition | Example, not standalone candidate | Group type for a club with selected activity capabilities; paid scheme rights and subscriptions are not Identity membership |
+| `committee` | Archetype / composition | Example, not standalone candidate | Group type and meeting composition; formal votes, resolutions and minutes may warrant their own independently governed lifecycle |
+| `department` | Archetype / composition | Example, not standalone candidate | Organisational unit type, potentially expressed through Identity's existing single-parent group hierarchy; reporting does not grant access |
+| `office` | Archetype / composition | Example, not standalone candidate | Organisational location/unit type; physical facilities, leases and managed assets belong to independently justified domain owners |
 
-Proposed discovery pipeline:
+### Activity domain candidates
 
-1. Application composition identifies the actual selected packages, declared Nuxt `extends` edges and documented, contract-based service providers.
-2. The build or composition validator checks names, provided interfaces, versions, duplicates, required providers, compatibility and dependency cycles.
-3. The inventory records the evidence and distinguishes installed, selected, configured, initialised, operational and enabled. Runtime readiness comes from authenticated, **owner-provided** health/readiness mechanisms, not inferences based on package presence.
-4. Permission for an action is evaluated **at request time** by Authorisation and the domain owner, using the verified actor, tenant/group, resource and assurance context. Do not store one universal “authorised” flag for a capability.
-5. Runtime feature types (e.g. Publisher's registered document types or Configuration's declared settings) are queried through their owning public contracts, not copied into a competing global feature database.
-6. Optionally expose an appropriately authorised, redacted administration/diagnostic view, without credentials, private routes, personal data or unrestricted package metadata.
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `membership` | Domain candidate | Candidate | Paid/scheme membership rights, terms, renewals and benefits; NOT Identity's existing group membership |
+| `events` | Domain candidate | Candidate | Planned participant activities and event lifecycle; not background scheduled tasks |
+| `course` | Domain candidate | Candidate | Structured learning offering and outcomes |
+| `enrolment` | Domain candidate | Candidate | Course/learner participation and allocation |
+| `training` | Domain candidate | Candidate | Verified training participation, competencies and completion records |
+| `gaming` | Domain candidate | Candidate | Game-specific state, rankings and participation; separate from generic Identity accounts |
+| `workshop` | Domain candidate | Candidate | Event/Course specialisation unless distinct rules justify a separate domain |
+| `blog` | Domain candidate | Candidate | Publisher document type and presentation unless separate domain state demonstrably exists |
+| `job` | Domain candidate | Candidate | Ambiguous: employment role/post is possible domain; background execution job belongs to Scheduler |
 
-This view is an **optional application composition output**. The design does not require a new `nuxt-layers/capability-register` runtime repository or database.
+### Commerce and operations domain candidates
 
-## 4. Precise status vocabulary
+| Name | Classification | Catalogue status | Responsibility / exclusion |
+|---|---|---|---|
+| `product` | Domain candidate | Candidate | Saleable products, families, bundles and variants; not stock quantities |
+| `pricing` | Domain candidate | Candidate | Price rules, lists, promotions and calculations; not order records |
+| `inventory` | Domain candidate | Candidate | Stock quantities, movements, reservations and stock ownership; not product definition or warehouse workflows |
+| `asset` | Domain candidate | Candidate | Owned controlled assets, lifecycle, assignments and valuation references; not generic sale stock |
+| `order` | Domain candidate | Candidate | Commercial orders, lines, states and fulfilment obligations; not payment settlement |
+| `billing` | Domain candidate | Candidate | Billable charges and periods; not the owner of the entire ordering lifecycle |
+| `invoice` | Domain candidate | Candidate | Invoice issuance, numbers, adjustments and settlement state; not payment provider execution |
+| `payment-gateway` | Domain candidate | Candidate | Payment-provider initiation, status, capture and refund coordination; no accounting ledger |
+| `accounting` | Domain candidate | Candidate | Ledger, journal, periods and reconciliations; not the originating sales or warehouse transactions |
+| `subscription` | Domain candidate | Candidate | Recurring commercial agreements, plans, renewals and entitlements; not payment provider |
+| `shop` | Domain candidate | Candidate | Retail/ecommerce composition and shop-specific operations; not replacement of Product/Order/Inventory |
+| `marketplace` | Domain candidate | Candidate | Multi-seller participation, listings and marketplace-specific commercial operations |
+| `warehouse` | Domain candidate | Candidate | Receiving, put-away, picking, packing and physical warehouse operations; Inventory owns stock facts |
+| `logistics` | Domain candidate | Candidate | Shipment and delivery operations, dispatch, carrier coordination and tracking |
 
-These labels describe **different dimensions**, not a single linear “maturity” ladder.
+## Evidence and status fields
 
-| Dimension | Values or question | Important distinction |
-|---|---|---|
-| Architecture | Established / candidate / proposed / consolidated | Does the governing catalogue recognise the responsibility? |
-| Design | Unreviewed / under review / review-agreed / governing-approved | Has the design direction been reviewed and accepted? |
-| Delivery evidence | No evidence / public contract / implementation / independently tested | What can be verified, at which revision? |
-| Selection | Available / installed / selected / composed | Is code actually present and included in this application? |
-| Configuration | Required providers available / missing / unknown | A selected package may not be usable |
-| Operation | Healthy / degraded / unavailable / unknown | Needs an owner-provided probe with time/context |
-| Exposure | Enabled / disabled / limited | The application's choice, not an access grant |
-| Permission | Allowed / denied / indeterminate **per request** | Authorisation and domain checks, not global metadata |
-| Publication | Private / restricted / application-public / world-public where supported | A resource's publication state, never implied by capability installation |
+**For every entry above:** implementation evidence **not checked**; independent consumer tests **not checked**; application installation, composition and operational health **not assessed**. These are explicitly unknown, not absent or failed.
 
-Never collapse **installed**, **operational**, **enabled**, **authorised** and **public** into one “available” badge. Unknown health must not be presented as healthy or treated as a permission grant.
+| Evidence to add | How it must be verified |
+|---|---|
+| Root public contract | Repository, path and exact revision of `CONTRACT.md`; or not retrievable |
+| Implementation / package | Exact repository revision, public exports and relevant package metadata |
+| Independent acceptance | Linked CI build, public-contract tests and minimal consumer evidence |
+| Architectural decision | Reviewed decision ID, and governing ADR/catalogue adoption reference if accepted |
+| Dependencies | Verified public `requires` and optional contracts; direct Nuxt `extends` separately |
+| Application selection | Explicit deployment's installed, selected and composed packages, not platform-wide |
+| Health / readiness | Owner-supported health observation with relevant time and scope |
+| Action permission | Request-time Authorisation and owning domain decision, never a global register grant |
+| Last verified | Date and exact source revision; use unknown where not examined |
 
-## 5. Relationship types and dependency validation
+## Rules for changes
 
-| Relationship | Meaning | Include in runtime/build dependency DAG? |
-|---|---|---|
-| `requires` | Consumer needs a provider's published public contract; fails closed if required provider absent | **Yes** |
-| `optionallyUses` | Consumer can operate without provider under an explicit documented absence mode | **Yes** where it is a declared runtime/build dependency |
-| `extendsNuxt` | Direct documented Nuxt framework contribution extension | **Yes** |
-| `specialises` | Declarative schema-validated archetype or model extension | Depends on actual compile/runtime dependency; not automatically an inheritance edge |
-| `composes` | Application assembles contracts, presentation and configuration | Represent at the application boundary; avoid inferred provider-to-consumer edges |
-| `publishesEvent` / `consumesEvent` | Owner business facts delivered through Message Queue | **No** by itself; any actual imported contract still counts |
-| `referencesResource` / `embedsModel` | Typed cross-owner data relationships | **No** by itself; access checks and version semantics remain necessary |
+1. Verify the current governing ADRs, Capability Standard, catalogue and owner root contracts before recording implementation or compatibility facts.
+2. Treat catalogue classifications and proposed design changes as distinct from actual availability; maintain review evidence in [`reviews/`](../reviews/) and status/decisions in [`records/`](../records/).
+3. An installed package is not necessarily configured, operational, enabled or authorised. An unknown status must not be shown as healthy.
+4. Do not impose an undocumented universal manifest. Nuxt capability layers already publish `capability.json`; framework-independent packages use their public contracts and exports.
+5. This register is neither a new runtime capability nor an authority for installing code, storing business data or deciding permissions.
 
-**Validation gate:** a proposed dependency is not automatically an approved manifest `requires` entry. Check the owner's root `CONTRACT.md`, provider availability, versions, optional absence, failure behaviour and combined cycle rules before declaring a machine-readable edge.
-
-## 6. Minimum initial register and review pointers
-
-This table is **a starter index**, not a complete inventory of all entries in the catalogue. Its classifications refer back to the governing catalogue and previous blueprint reviews; no delivery state is asserted.
-
-| Entry | Category / stage | Review focus |
-|---|---|---|
-| Identity, Authentication, Authorisation, Profile, Configuration | Established Foundations | Public contracts, caller/decision assurance and cross-capability composition |
-| Publisher, Media, Storage | Established Platform | Document ownership, model/template reuse and file-byte boundaries |
-| Scheduler, Workflow, Message Queue | Established Platform | Business work versus orchestration and event transport |
-| Temporal Gateway | Infrastructure integration library | Shared external SDK/worker lifecycle without business state |
-| Template Engine | Library candidate | Deterministic parsing, binding and rendering; not model/document persistence |
-| Project, Task, Process, Procedure, Case | Candidate / review vocabulary | Definitions, instances, outcomes, group ownership, human assignments and adaptive work; no automatic new repositories |
-| Events, Booking, Course | Domain candidates | One-off and recurring scheduled occurrences; capacity and specialist domain responsibilities |
-| Modelling core, modellers and model types | Proposed vocabulary; implementation forms unapproved | Semantic ownership, metamodel validation, BPMN/DMN/CMMN/flowcharts, editors and pinned revisions |
-| Product, Pricing, Inventory, Order, Warehouse | Domain candidates | Multi-channel stock consistency and source-of-truth boundaries |
-| Organisation, Company, Club, Committee, Department, Office | Archetypes/compositions by default | Governing PR #34; no second Identity group model |
-| Integrations and external provider connectors | Established Platform + optional adapters | Provider accounts, credentials references, mappings and sync coordination |
-| Search, Reporting, Audit, Reviews | Candidates | Authoritative facts versus derived indexes, reports, evidence and moderation |
-
-**Next action:** replace broad starter rows with traceable entries for every catalogue item, linking review decisions and verified public sources. Keep unknown values explicit rather than manufacturing implementation status.
-
-## 7. Working catalogue management
-
-The copied [`capability-catalogue.md`](capability-catalogue.md) is the **editable proposed future catalogue**, initially identical to the governing source. It may diverge deliberately during review. For each proposed change:
-
-- State what is added, removed, renamed, consolidated or reclassified and the bounded ownership reason.
-- Record the affected published contracts, dependencies, consumers, security/privacy implications and compatibility impact.
-- Explain whether an accepted ADR or standard already permits it, requires clarification, or obstructs it. Distinguish **an incomplete rule** from a **conflicting rule**.
-- Do not rewrite or silently delete accepted governing requirements in the blueprint; mark proposed amendments as proposals and state their alternatives.
-- Capture proposed ADR/standard amendments in the review decision register before preparing any change in the governing repository.
-- When ratified, update the governing catalogue and relevant ADRs/standards through separately reviewed pull requests; refresh and reconcile the working copy rather than overwriting new governing changes blindly.
-
-**Source-copy caveat:** the working catalogue was copied verbatim. Its internal relative links (for example `decisions/ADR-....md` and `identity.md`) point to the source repository's former relative layout; do not interpret their absence from this blueprint directory as missing governing ADRs. We should either convert them to explicit governing-repository links in a deliberate later edit or maintain a visible source mapping.
-
-## 8. Potential ADR/standard impact — issues to assess, not decisions
-
-| Question | Current authority or gap | Proposed review |
-|---|---|---|
-| Can a separate design-time register exist? | Existing catalogue + ADR-0004 governance and documentation placement | Document as non-authoritative working artefact; if intended as permanent governing material, confirm document placement in ADR-0004 |
-| Should all packages have a machine-readable manifest? | Capability Standard §4 currently limits `capability.json` to Nuxt capabilities; no universal schema | Do not introduce one unless independent, non-Nuxt consumer cases justify a new standard/ADR |
-| Who is authoritative for runtime health and feature lists? | Owners' public contracts and application composition; CD-04/CD-07 proposals | Define diagnostics contract only where necessary; no global mutable business registry |
-| How are dependencies and extension edges checked? | ADR-0016 already covers direction and combined acyclicity | Specify verification evidence, not redundant new authority |
-| Do model templates/definitions require a Model capability? | Publisher owns its document lifecycle; Template Engine is a library candidate | Evaluate semantic validation, reuse, versioning and cross-document references first |
-| Do Process/Procedure/Project/Task/Events need new owners? | Catalogue and blueprint proposals; some entries are candidates, others conceptual | Prove separately owned lifecycle before capability/ADR amendment |
-| Can an app load code based on a register row? | Existing explicit composition and security model | **No**; any dynamic-plug-in design would need an explicit security/architecture decision |
-
-## 9. Acceptance criteria for this blueprint
-
-1. The source catalogue is copied at a recorded commit with content unchanged at the initial checkpoint.
-2. Catalogue and register explicitly state their different roles and authority.
-3. Every proposed status/relationship carries a verifiable source or is labelled unverified.
-4. Existing package/public contract and ADR-0016 dependency rules are respected without an invented universal manifest.
-5. No installation, authorisation, secret, domain-record or runtime-ownership privileges are granted by the register.
-6. ADR impacts are recorded before any governing PR is created.
-7. Later catalogue revisions can be compared against the source baseline and the latest accepted governing revision without silent loss of upstream changes.
-
-**Review checkpoint:** this document is a starting design for discussion, not a completed capability-by-capability audit.
+**Next work:** assess each entry's root public contract and acceptance evidence, adding verified provenance without presuming implementation from its catalogue entry.

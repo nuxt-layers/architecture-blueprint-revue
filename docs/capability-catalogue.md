@@ -1,17 +1,19 @@
 # Capability Catalogue
 
-> **In short:** authoritative ownership boundaries for established capabilities and provisional boundaries for candidate capabilities. The catalogue defines vocabulary and intended relationships, not delivery status or implementation plans. Capability detail belongs in its own repository ([ADR-0004](decisions/ADR-0004-documentation-placement.md)).
+> **Blueprint working copy — non-normative.** Initially copied from [`architecture-rules/docs/catalogue.md`](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/catalogue.md) at governing commit `2eea557fa3acbf9412fea065d2a3cdda42a764fc` (source blob `dfb3cb26c5dcd10b13f4fc7fc03d8d5f07e1b7d2`). This copy is developed for review; the governing repository remains authoritative. Compare proposed changes against its latest accepted `master` before promotion. Related [Capability Register](capability-register.md) records catalogue entries and separate evidence.
+
+> **In short:** authoritative ownership boundaries for established capabilities and provisional boundaries for candidate capabilities. The catalogue defines vocabulary and intended relationships, not delivery status or implementation plans. Capability detail belongs in its own repository ([ADR-0004](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0004-documentation-placement.md)).
 
 ## Governing rules
 
-1. Each capability owns a cohesive responsibility, classified as Foundation, Platform or Domain, independently of framework or deployment (ADR-0001). Nuxt capability layers retain headless cores and optional presentation under [ADR-0009](decisions/ADR-0009-headless-capability-layers.md).
-2. Applications are thin composition roots, supplying infrastructure, configuration, routing and deployment choices. Framework-independent capabilities use documented independent consumers; Nuxt adapters retain ADR-0012's host budget ([ADR-0001](decisions/ADR-0001-capability-repositories-and-composition-shells.md), [ADR-0012](decisions/ADR-0012-trivial-composition.md)).
-3. Contract dependencies and direct Nuxt extension edges are explicitly declared, directed and jointly acyclic. Service use is through public contracts and host-supplied ports; deliberate schema-validated archetype specialisation and Nuxt extension of documented public contributions are permitted under [ADR-0016](decisions/ADR-0016-controlled-layer-specialisation-and-composition.md). No extension implies access to private source.
-4. Stateful capabilities own their persistence ports, schemas, migrations and any other stores ([ADR-0002](decisions/ADR-0002-composition-supplied-persistence-and-capability-owned-schemas.md), [ADR-0006](decisions/ADR-0006-polyglot-persistence-and-data-store-security.md)). No shared persistence service is permitted, and required persistence fails closed when its provider is absent.
+1. Each capability owns a cohesive responsibility, classified as Foundation, Platform or Domain, independently of framework or deployment (ADR-0001). Nuxt capability layers retain headless cores and optional presentation under [ADR-0009](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0009-headless-capability-layers.md).
+2. Applications are thin composition roots, supplying infrastructure, configuration, routing and deployment choices. Framework-independent capabilities use documented independent consumers; Nuxt adapters retain ADR-0012's host budget ([ADR-0001](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0001-capability-repositories-and-composition-shells.md), [ADR-0012](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0012-trivial-composition.md)).
+3. Contract dependencies and direct Nuxt extension edges are explicitly declared, directed and jointly acyclic. Service use is through public contracts and host-supplied ports; deliberate schema-validated archetype specialisation and Nuxt extension of documented public contributions are permitted under [ADR-0016](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0016-controlled-layer-specialisation-and-composition.md). No extension implies access to private source.
+4. Stateful capabilities own their persistence ports, schemas, migrations and any other stores ([ADR-0002](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0002-composition-supplied-persistence-and-capability-owned-schemas.md), [ADR-0006](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0006-polyglot-persistence-and-data-store-security.md)). No shared persistence service is permitted, and required persistence fails closed when its provider is absent.
 5. Identity owns users, groups, the single-parent group hierarchy and memberships; Profile owns personal data; Authentication owns sessions; Authorisation owns access decisions. Every human identity has one system-managed personal group.
 6. Every protected operation is authorised on the server. Security follows OWASP ASVS 5.0 Level 2, with applicable Level 3 controls for security-sensitive operations.
 7. Presentation meets WCAG 2.2 AA, supports internationalisation and uses Theme Manager's semantic vocabulary. Privacy, data minimisation, retention and consent apply across capabilities.
-8. Separate deployment is optional; the default architecture is a modular monolith. Capability ownership, implementation and deployment are distinct; refer to the [Capability Standard](capability-standard.md).
+8. Separate deployment is optional; the default architecture is a modular monolith. Capability ownership, implementation and deployment are distinct; refer to the [Capability Standard](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/capability-standard.md).
 
 ## Capabilities
 
@@ -24,10 +26,10 @@
 | `authentication` | Foundation (IAM) | Credential verification, sign-in identifiers, sessions, rotation, revocation and reauthentication |
 | `authorisation` | Foundation (IAM) | Server-side, resource-aware access decisions, with no implicit inheritance through the group hierarchy |
 | `profile` | Foundation (IAM) | The personal data describing a person, keyed by an Identity identifier: what each context may see, under the person's control, and their access, correction, export and erasure requests |
-| `iam-integration` | Foundation (IAM) | The IAM suite's architecture, cross-capability processes and the adapters connecting its members ([ADR-0005](decisions/ADR-0005-iam-suite.md)); no data of its own |
-| `rich-text` | Library | The one safe formatted-text format, its profiles, checks and safe tree; never renders ([ADR-0011](decisions/ADR-0011-shared-rich-text-and-configurable-copy.md)) |
+| `iam-integration` | Foundation (IAM) | The IAM suite's architecture, cross-capability processes and the adapters connecting its members ([ADR-0005](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0005-iam-suite.md)); no data of its own |
+| `rich-text` | Library | The one safe formatted-text format, its profiles, checks and safe tree; never renders ([ADR-0011](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0011-shared-rich-text-and-configurable-copy.md)) |
 | `publisher` | Platform | Documents of host-registered types: drafts, versions, approval, scheduling, addresses, listings and feeds |
-| `media` | Platform | Images: web-ready variants, metadata removal, alt text, group ownership and allowances; the files themselves through the Files shape ([ADR-0012](decisions/ADR-0012-trivial-composition.md)), which the host fills with `storage` |
+| `media` | Platform | Images: web-ready variants, metadata removal, alt text, group ownership and allowances; the files themselves through the Files shape ([ADR-0012](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0012-trivial-composition.md)), which the host fills with `storage` |
 | `storage` | Platform | Files' bytes in an object store behind one provider-agnostic port: keys under tenant and group, signed addresses, lifecycle, backups and usage figures; no records of its own |
 | `ui` | Presentation | Generic, fully styled components on Theme Manager's vocabulary; knows no capability |
 | `content-editor` | Presentation | Editing screens for Publisher's documents, saving through Publisher's functions; no data of its own |
@@ -49,7 +51,7 @@
 
 ## Infrastructure integration libraries
 
-These are framework-independent packages, not independently composable Nuxt capabilities; their ownership and requirements follow [ADR-0015](decisions/ADR-0015-infrastructure-integration-libraries.md).
+These are framework-independent packages, not independently composable Nuxt capabilities; their ownership and requirements follow [ADR-0015](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0015-infrastructure-integration-libraries.md).
 
 | Library | Owns |
 |---|---|
@@ -197,4 +199,4 @@ A repository is created only once these are established:
 7. security, privacy, accessibility and internationalisation obligations;
 8. independent contract, integration and consumer acceptance tests.
 
-The group model is defined in [Identity and Access](identity.md) ([ADR-0003](decisions/ADR-0003-group-model-and-identity-first.md)).
+The group model is defined in [Identity and Access](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/identity.md) ([ADR-0003](https://github.com/nuxt-layers/architecture-rules/blob/2eea557fa3acbf9412fea065d2a3cdda42a764fc/docs/decisions/ADR-0003-group-model-and-identity-first.md)).

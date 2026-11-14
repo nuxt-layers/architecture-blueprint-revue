@@ -67,7 +67,7 @@ These entries record design proposals for review. They do not amend accepted ADR
 
 ## Consolidated personal, membership, legal-governance and publishing direction (13 November 2026)
 
-The synthesis and proposed acceptance cases are in [`proposals/membership-governance-publication.md`](proposals/membership-governance-publication.md). These are **review-agreed design directions**, not yet accepted normative requirements or verified implementation contracts.
+The synthesis and proposed acceptance cases are in [`proposals/membership-governance-publication.md`](../proposals/membership-governance-publication.md). These are **review-agreed design directions**, not yet accepted normative requirements or verified implementation contracts.
 
 | ID | Direction | Status / qualification |
 |---|---|---|
@@ -86,7 +86,7 @@ The synthesis and proposed acceptance cases are in [`proposals/membership-govern
 
 ## Task 4 — Capability Discovery and Registry decisions (14 November 2026)
 
-Full review: [`reviews/capability-discovery-registry.md`](reviews/capability-discovery-registry.md).
+Full review: [`reviews/capability-discovery-registry.md`](../reviews/capability-discovery-registry.md).
 
 | ID | Direction | Status |
 |---|---|---|
@@ -103,7 +103,7 @@ The next review workstream is External Application Integrations. These discovery
 
 ## Task 5 — External Application Integrations (14 November 2026)
 
-Full proposal: [`reviews/external-application-integrations.md`](reviews/external-application-integrations.md). These entries are proposed design directions, **not accepted ADRs, APIs or implementation evidence**.
+Full proposal: [`reviews/external-application-integrations.md`](../reviews/external-application-integrations.md). These entries are proposed design directions, **not accepted ADRs, APIs or implementation evidence**.
 
 | ID | Direction / unresolved choice | Status |
 |---|---|---|
@@ -122,7 +122,7 @@ Next review: **Workflow / Process / Task / Scheduler / Message Queue / Temporal 
 
 ## Task 6 — Workflow, Process, Task and Temporal Gateway (14 November 2026)
 
-Complete review: [`reviews/workflow-process-task-execution.md`](reviews/workflow-process-task-execution.md). No normative or implementation change is authorised.
+Complete review: [`reviews/workflow-process-task-execution.md`](../reviews/workflow-process-task-execution.md). No normative or implementation change is authorised.
 
 | ID | Direction / decision | Status |
 |---|---|---|
@@ -143,7 +143,7 @@ Follow-on review: Multi-channel commerce and warehouse domain ownership (Product
 
 ## Task 7 — Organisation candidate reduction (14 November 2026)
 
-Full proposal: [`reviews/organisation-candidate-consolidation.md`](reviews/organisation-candidate-consolidation.md).
+Full proposal: [`reviews/organisation-candidate-consolidation.md`](../reviews/organisation-candidate-consolidation.md).
 
 | ID | Recommendation / question | Status |
 |---|---|---|
@@ -158,7 +158,7 @@ Next blueprint workstream remains Multi-channel Commerce and Warehouse Operation
 
 ## Task 8 — Multi-channel Commerce and Warehouse (14 November 2026)
 
-See [`reviews/multichannel-commerce-warehouse.md`](reviews/multichannel-commerce-warehouse.md). Recommendations only, not accepted architectural amendments or implemented interfaces.
+See [`reviews/multichannel-commerce-warehouse.md`](../reviews/multichannel-commerce-warehouse.md). Recommendations only, not accepted architectural amendments or implemented interfaces.
 
 | ID | Proposed direction / question | Status |
 |---|---|---|
@@ -179,7 +179,7 @@ Potential follow-up: consolidate unresolved domain candidates and foundation dep
 
 ## Task 9 — Catalogue Rationalisation and Dependencies (14 November 2026)
 
-Detailed classification and dependency review: [`reviews/catalogue-rationalisation-dependencies.md`](reviews/catalogue-rationalisation-dependencies.md). All directions here remain review proposals unless independently covered by accepted governing rules.
+Detailed classification and dependency review: [`reviews/catalogue-rationalisation-dependencies.md`](../reviews/catalogue-rationalisation-dependencies.md). All directions here remain review proposals unless independently covered by accepted governing rules.
 
 | ID | Proposed decision | Status |
 |---|---|---|
@@ -199,7 +199,7 @@ Next: proposed catalogue clarification, then consolidate outstanding decisions a
 
 ## Task 9 addendum — Model and Definition Lifecycle (14 November 2026)
 
-These conceptual directions refine CR-06 and the candidate dispositions in [`reviews/catalogue-rationalisation-dependencies.md`](reviews/catalogue-rationalisation-dependencies.md). They do not authorise additional repositories, new standards, runtime dependencies or code changes.
+These conceptual directions refine CR-06 and the candidate dispositions in [`reviews/catalogue-rationalisation-dependencies.md`](../reviews/catalogue-rationalisation-dependencies.md). They do not authorise additional repositories, new standards, runtime dependencies or code changes.
 
 | ID | Decision / direction | Status |
 |---|---|---|
