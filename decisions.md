@@ -83,3 +83,20 @@ The synthesis and proposed acceptance cases are in [`proposals/membership-govern
 | G-10 | Do not create new community/public ownership layers, membership databases or automatic legal-rule engines without proven independent authority | Review agreed constraint |
 
 **Outstanding before ADR adoption:** decide member preference persistence and lifecycle, the legal-context representation, Publisher's actual public interfaces, licensing/rights enforcement, publication dependency handling, and cross-jurisdiction legal policy provenance.
+
+## Task 4 — Capability Discovery and Registry decisions (14 November 2026)
+
+Full review: [`reviews/capability-discovery-registry.md`](reviews/capability-discovery-registry.md).
+
+| ID | Direction | Status |
+|---|---|---|
+| CD-01 | Do not create a new standalone registry capability or persistent database on present evidence | Proposed for approval |
+| CD-02 | Keep `capability.json` for Nuxt layers, and `CONTRACT.md`/exports for other implementation forms; no universal manifest without approval | Existing governing rule; proposed continuation |
+| CD-03 | Generate descriptive application-level inventory from selected, verified metadata at build/composition time | Proposed; not an existing platform API |
+| CD-04 | Separate package installation, composed providers, runtime operational state, enablement, user permission and public availability | Proposed acceptance model |
+| CD-05 | Track contract dependencies and Nuxt extension edges separately; validate one combined acyclic graph | Verified governing rule (ADR-0016) |
+| CD-06 | A discovery record never grants permissions, installs executable code, or overrides owner contracts | Proposed enforcement safeguard |
+| CD-07 | Runtime feature lists, registered document types and permissions stay with the owning capability and Authorisation | Proposed application integration discipline |
+| CD-08 | Approve only the minimal additional metadata demonstrated necessary by consumer tests | Open; needs follow-on specification if required |
+
+The next review workstream is External Application Integrations. These discovery entries do not alter `architecture-rules` or mandate new packages.
