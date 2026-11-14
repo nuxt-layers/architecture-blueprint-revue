@@ -196,3 +196,20 @@ Detailed classification and dependency review: [`reviews/catalogue-rationalisati
 | CR-11 | Conduct a blueprint-wide accepted-authority/ADR-impact review before normative amendments | Proposed next workstream |
 
 Next: proposed catalogue clarification, then consolidate outstanding decisions and specify precisely which ADRs or standards—if any—require amendment. No implementation or new runtime package is approved here.
+
+## Task 9 addendum — Model and Definition Lifecycle (14 November 2026)
+
+These conceptual directions refine CR-06 and the candidate dispositions in [`reviews/catalogue-rationalisation-dependencies.md`](reviews/catalogue-rationalisation-dependencies.md). They do not authorise additional repositories, new standards, runtime dependencies or code changes.
+
+| ID | Decision / direction | Status |
+|---|---|---|
+| MD-01 | Distinguish definition, instance/occurrence, outcome, model/view/document revision and execution binding | Proposed |
+| MD-02 | Retain Project (group-owned goals/resources), human Task (assigned work) and Event (scheduled activity/occurrences) as credible domains | Proposed; independent lifecycle evidence required |
+| MD-03 | Distinguish Process business activity/outcomes, Procedure repeatable method, Workflow coordination and Scheduler technical timing | Proposed |
+| MD-04 | Model is typed semantic information; metamodel validates, modeller edits, modelling is an activity and document may embed/reference model revisions | Proposed |
+| MD-05 | Template Engine remains the existing deterministic render/bind library candidate; it owns neither models nor document lifecycles | Verified governing catalogue classification; integration proposed |
+| MD-06 | BPMN, DMN, CMMN and flowchart representations do not confer execution permission without explicit versioned approved binding | Proposed |
+| MD-07 | Group-owned model/project/procedure resources reference authoritative owners; capacity, permission, measurement and provenance are not duplicated | Proposed |
+| MD-08 | Test Publisher and domain public contracts before creating Model, Procedure or Case capabilities | **Open** ownership decision |
+
+Following PR #10 approval, evaluate whether any of these shared invariants require targeted catalogue/ADR amendments rather than individual domain contract provisions.
