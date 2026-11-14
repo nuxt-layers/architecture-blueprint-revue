@@ -155,3 +155,24 @@ Full proposal: [`reviews/organisation-candidate-consolidation.md`](reviews/organ
 | OC-06 | On approval, submit a separate narrowly scoped governing catalogue clarification PR, retaining valid terminology and excluding changes to Identity/Authorisation contracts | **Pending explicit approval** |
 
 Next blueprint workstream remains Multi-channel Commerce and Warehouse Operations.
+
+## Task 8 — Multi-channel Commerce and Warehouse (14 November 2026)
+
+See [`reviews/multichannel-commerce-warehouse.md`](reviews/multichannel-commerce-warehouse.md). Recommendations only, not accepted architectural amendments or implemented interfaces.
+
+| ID | Proposed direction / question | Status |
+|---|---|---|
+| CW-01 | Product, Pricing, Inventory, Order and Warehouse are distinct candidate business owners, with lifecycle/repository justification required individually | Proposed |
+| CW-02 | `shop` primarily represents application composition; do not duplicate owned Product/Order/Inventory data | Proposed |
+| CW-03 | An Amazon/eBay sales channel is an Integrations case, not by itself a `marketplace` multi-seller domain | Proposed |
+| CW-04 | Inventory owns stock movement, reservations, allocation and available-to-promise; remote inventory is eventual projection | Proposed |
+| CW-05 | Order owns commercial state and accepted price snapshots; avoid false cross-capability atomic transaction guarantees | Proposed |
+| CW-06 | Warehouse owns physical receiving, picking and packing evidence, not a competing inventory ledger | Proposed |
+| CW-07 | Determine channel-listing lifecycle owner and remote mapping/version boundaries | **Open** |
+| CW-08 | Define transfers, returns, backorders, consignment, multi-warehouse allocation and shipment cross-domain hand-offs | **Open** |
+| CW-09 | Secure group-scoped connectors, durable events, idempotent intake, retries and reconciliation evidence | Proposed |
+| CW-10 | Further financial/jurisdiction review required for Pricing, taxation, Billing, Invoice, Payment Gateway and Accounting | **Open** |
+| CW-11 | Each new candidate needs an independently justified lifecycle and public contract; missing contracts are not implementation evidence | Verified governing rule |
+| CW-12 | Governing catalogue organisational-archetype PR #34 is independent and not yet merged into `master` | Pending governing approval |
+
+Potential follow-up: consolidate unresolved domain candidates and foundation dependencies, then perform a blueprint-to-ADR change-impact review before proposing any further normative rule changes.
