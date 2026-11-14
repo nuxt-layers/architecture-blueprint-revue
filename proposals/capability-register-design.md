@@ -5,7 +5,7 @@
 **Repository:** `nuxt-layers/architecture-blueprint-revue` (the existing blueprint review repository; the spelling `revue` is intentional).  
 **Governing authority at creation:** `nuxt-layers/architecture-rules` `master` at `2eea557fa3acbf9412fea065d2a3cdda42a764fc`.  
 **Register data:** [Capability Register](../docs/capability-register.md) is the populated working register; this document specifies the proposed design.  
-**Working catalogue:** [`capability-catalogue.md`](../docs/capability-catalogue.md), initially copied **verbatim** from governing `docs/catalogue.md` at that revision. The copied catalogue's relative links originally target the governing repository's `docs/` and `docs/decisions/` layout; while unmodified, they are source-relative and must not be mistaken for local blueprint documents. Use links to the governing repository for authoritative ADRs and standards.
+**Working catalogue:** [`capability-catalogue.md`](../docs/capability-catalogue.md), initially copied **verbatim** from governing `docs/catalogue.md` at that revision. Its original source-relative ADR and standards links were subsequently replaced by explicit links to the governing source revision in the working copy. Accepted rules in the latest governing repository remain authoritative.
 **Existing review:** [Capability Discovery and Application Registry](../reviews/capability-discovery-registry.md), decisions CD-01–CD-08 in [`decisions.md`](../records/decisions.md).
 
 ## 1. Why keep two documents?
@@ -13,11 +13,11 @@
 | Document | Question it answers | Content and authority |
 |---|---|---|
 | **Capability Catalogue** (this blueprint's working copy) | What responsibilities or reusable components should exist across the platform? | Architectural vocabulary, established capabilities, proposed candidates, exclusions, ownership and classification. The governing original remains authoritative until a separate approved architecture-rules PR changes it. |
-| **Capability Register** (this document) | Which catalogue entries have been specified, implemented, integrated or used, and with what evidence? | A traceable design-time status and relationship register, plus a proposed *application-specific* read-only discovery view. Status here is evidence-based and non-authoritative for runtime operation. |
+| **Capability Register** (the populated working inventory) | Which catalogue entries have been specified, implemented, integrated or used, and with what evidence? | A traceable design-time status and relationship register, plus a proposed *application-specific* read-only discovery view. Status here is evidence-based and non-authoritative for runtime operation. |
 
 A catalogue entry can exist without a package. A package can be installed but not configured or operational. Being operational never implies permission to use it.
 
-The two working documents are **not** new business capabilities, runtime persistence services or competing sources of authority. This document is the design for a register; it is not a claim that the register already exists as software.
+Neither working document is a new business capability, runtime persistence service or competing source of authority. This proposal explains how the already populated design-time register should evolve; it does not claim that any application runtime registry exists.
 
 ## 2. Working principles
 
@@ -132,7 +132,7 @@ The working [`capability-catalogue.md`](../docs/capability-catalogue.md) is the 
 - Capture proposed ADR/standard amendments in the review decision register before preparing any change in the governing repository.
 - When ratified, update the governing catalogue and relevant ADRs/standards through separately reviewed pull requests; refresh and reconcile the working copy rather than overwriting new governing changes blindly.
 
-**Source-copy caveat:** the working catalogue was copied verbatim. Its internal relative links (for example `decisions/ADR-....md` and `identity.md`) point to the source repository's former relative layout; do not interpret their absence from this blueprint directory as missing governing ADRs. We should either convert them to explicit governing-repository links in a deliberate later edit or maintain a visible source mapping.
+**Source-copy provenance:** the working catalogue was first copied verbatim at the recorded governing revision, then labelled as a non-normative working copy and its ADR/standard links changed to explicit governing-source URLs. Those editorial changes must be distinguished from later proposed architectural changes.
 
 ## 8. Potential ADR/standard impact — issues to assess, not decisions
 
