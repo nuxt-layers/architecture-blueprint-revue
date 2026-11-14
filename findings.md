@@ -116,3 +116,13 @@ See [`reviews/external-application-integrations.md`](reviews/external-applicatio
 - Proposed shared concerns: scoped connection lifecycle and credential references, explicit provider authorisation, read-only provider/operation discovery, external-ID mapping and synchronisation checkpoints, audit provenance, webhook verification, idempotency and reconciliation. Business rules and authoritative records remain with originating domain capabilities.
 - Crucial distinction: installed connector, configured account, valid credentials, authorised operation, reachable provider and completed synchronisation are different states; no proxy of permissions, group membership or publication visibility may substitute for server-side Authorisation.
 - Multi-channel retail scenario (owned website, Amazon, eBay) is an architecture acceptance test, not proof of connector availability. Jurisdiction, privacy, external publication licences and organisational policy remain independently relevant.
+
+## Task 6 — Workflow, Process, Task and Temporal execution boundaries (14 November 2026)
+
+Full review and acceptance cases: [`reviews/workflow-process-task-execution.md`](reviews/workflow-process-task-execution.md).
+
+The authoritative catalogue establishes `scheduler` (runs owners' scheduled handlers), `message-queue` (delivers owners' outbox events) and `workflow` (review, sign-off and approval routes), while `temporal-gateway` is an ADR-0015 framework-independent infrastructure integration library that **does not** own business scheduling, orchestration, event delivery or persistence. `process` (business process definitions/outcomes) and `task` (assigned human work) remain candidates, not approved additional repositories.
+
+A key ambiguity is the overloaded word *task*: a human assignment is not an ADR-0012 `{name, every, run}` scheduled handler and neither is a Temporal activity. Identity's published `getIdentityTasks()` returns maintenance and outbox handlers; Publisher's `composePublisher()` returns scheduled maintenance/relay and uses a digest-bound approval port. Clock owns temporal semantics, not scheduling. These are verified public-contract examples, **not evidence that Workflow, Scheduler or MQ have interoperable runtime contracts**.
+
+Root `CONTRACT.md` was not retrievable for Scheduler, Workflow, Message Queue, Temporal Gateway, Task or Notifications at review time; distinguish missing evidence from implementation status. The proposed design maintains domain-owned records, durable outboxes, explicit approved actions, tenant isolation, replay/idempotency, workflow versioning, schedule time semantics and provider failure recovery. No Temporal persistence or queue state belongs in Hetzner S3-compatible application object storage.

@@ -119,3 +119,24 @@ Full proposal: [`reviews/external-application-integrations.md`](reviews/external
 | EI-10 | Evaluate OSS libraries and provider client licences, maintenance and suitability before dependency selection | **Open** |
 
 Next review: **Workflow / Process / Task / Scheduler / Message Queue / Temporal Gateway separation**, including the role of integration synchronisation and process orchestration.
+
+## Task 6 — Workflow, Process, Task and Temporal Gateway (14 November 2026)
+
+Complete review: [`reviews/workflow-process-task-execution.md`](reviews/workflow-process-task-execution.md). No normative or implementation change is authorised.
+
+| ID | Direction / decision | Status |
+|---|---|---|
+| WE-01 | Preserve existing catalogue ownership for Scheduler, Message Queue, Workflow and ADR-0015 Temporal Gateway | Verified classification; proposed continuation |
+| WE-02 | Distinguish human Task, Scheduler handler and Temporal activity | Proposed; prevents duplicate task registries |
+| WE-03 | Process needs demonstrable independent versioned definitions and outcomes to justify a new capability | Open candidate classification |
+| WE-04 | Workflow's existing catalogue remit is approval, review and sign-off; broader orchestration is not assumed | Verified starting remit; extension requires decision |
+| WE-05 | Gateway centralises shared Temporal SDK/worker connectivity, never business execution decisions or persistence | ADR-0015 accepted constraint |
+| WE-06 | MQ carries owners' published outbox events; Temporal signals do not silently substitute for cross-capability event transport | Proposed integration rule |
+| WE-07 | Domain owners remain authoritative for outcome, authorisation, approval validation and compensating changes | Governing responsibility applied to scenario |
+| WE-08 | Explicit schedule, worker retry, idempotency, replay, cancellation and failure semantics | Open contract design |
+| WE-09 | Reconcile ADR-0012 scheduled handler shape with Scheduler/Temporal without double scheduling | Open; root contracts unavailable |
+| WE-10 | Defer new `process` and `task` repositories until distinct ownership and human-work lifecycle are proven | Proposed |
+| WE-11 | Preserve binding of approvals to action, resource version/digest and current policy; confirm evidence ownership | Open public-contract review |
+| WE-12 | Determine Temporal operational persistence, recovery and deployment independently of business data and image/file object storage | Open operational design |
+
+Follow-on review: Multi-channel commerce and warehouse domain ownership (Product, Inventory, Pricing, Order, Warehouse) under the execution and integrations constraints.
