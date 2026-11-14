@@ -140,3 +140,18 @@ Complete review: [`reviews/workflow-process-task-execution.md`](reviews/workflow
 | WE-12 | Determine Temporal operational persistence, recovery and deployment independently of business data and image/file object storage | Open operational design |
 
 Follow-on review: Multi-channel commerce and warehouse domain ownership (Product, Inventory, Pricing, Order, Warehouse) under the execution and integrations constraints.
+
+## Task 7 — Organisation candidate reduction (14 November 2026)
+
+Full proposal: [`reviews/organisation-candidate-consolidation.md`](reviews/organisation-candidate-consolidation.md).
+
+| ID | Recommendation / question | Status |
+|---|---|---|
+| OC-01 | Default `organisation`, `business`, `company`, `club`, `committee`, `department`, `office` to archetype/composition examples rather than independent capability candidates | Proposed for review approval |
+| OC-02 | Keep one Identity group/hierarchy/membership model; archetypes only reference its public identifiers | Verified governing boundary |
+| OC-03 | Keep specific independently governed records (company filings, committee resolutions, club subscriptions, facilities) with the appropriate demonstrated domain owner | Proposed separation; individual domains not approved |
+| OC-04 | Treat scheme/paid `membership` as potentially distinct from Identity membership, not another identity relationship | Verified catalogue distinction; independent lifecycle assessment pending |
+| OC-05 | Do not promote `organisation-model` to a new repository without evidence for versioned archetypes and governance lifecycle | Proposed continuation of D-02a/D-02c |
+| OC-06 | On approval, submit a separate narrowly scoped governing catalogue clarification PR, retaining valid terminology and excluding changes to Identity/Authorisation contracts | **Pending explicit approval** |
+
+Next blueprint workstream remains Multi-channel Commerce and Warehouse Operations.
