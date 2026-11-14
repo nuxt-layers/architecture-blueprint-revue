@@ -100,3 +100,22 @@ Full review: [`reviews/capability-discovery-registry.md`](reviews/capability-dis
 | CD-08 | Approve only the minimal additional metadata demonstrated necessary by consumer tests | Open; needs follow-on specification if required |
 
 The next review workstream is External Application Integrations. These discovery entries do not alter `architecture-rules` or mandate new packages.
+
+## Task 5 — External Application Integrations (14 November 2026)
+
+Full proposal: [`reviews/external-application-integrations.md`](reviews/external-application-integrations.md). These entries are proposed design directions, **not accepted ADRs, APIs or implementation evidence**.
+
+| ID | Direction / unresolved choice | Status |
+|---|---|---|
+| EI-01 | `integrations` is the existing Platform classification; consider connection records and sync coordination as independently owned lifecycle | Proposed; root contract unavailable |
+| EI-02 | Keep each external provider as an optional adapter behind documented public interfaces, not a compulsory standalone Nuxt layer | Proposed |
+| EI-03 | Identity owns membership, Authorisation decides access, domains own business data; connectors never mutate another capability's persistence directly | Governing boundary; integration proposal |
+| EI-04 | Store connection metadata and opaque credential references; decide secure credential-owning infrastructure and token revocation mechanisms separately | Proposed; detailed security review required |
+| EI-05 | Separate installed, configured, connected, authorised, operational and in-sync status | Proposed |
+| EI-06 | Use authoritative owner outboxes and validated idempotent inbound commands; preserve retry, provenance and reconciliation | Proposed |
+| EI-07 | Respect organisation-specific policy, privacy, provider terms and all applicable jurisdictional constraints, without asserting automatic legal validity | Proposed |
+| EI-08 | Define boundary between connection-level external-ID/checkpoint state and domain-owned mapping/business meaning | **Open** |
+| EI-09 | Specify smallest portable connection/provider contract, security assurance and operational failure model | **Open** |
+| EI-10 | Evaluate OSS libraries and provider client licences, maintenance and suitability before dependency selection | **Open** |
+
+Next review: **Workflow / Process / Task / Scheduler / Message Queue / Temporal Gateway separation**, including the role of integration synchronisation and process orchestration.
